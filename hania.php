@@ -6,6 +6,8 @@
     <title>Document</title>
 </head>
 <body>
-    
+    <style>
+        padding=50;
+        </style>
 </body>
 </html>
