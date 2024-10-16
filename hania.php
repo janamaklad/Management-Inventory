@@ -7,7 +7,7 @@
 </head>
 <body>
     <style>
-        padding=50;
+        padding=40;
         </style>
 </body>
 </html>
