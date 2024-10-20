@@ -1,0 +1,76 @@
+/* Custom Styles */
+body {
+    background-color: #f8f9fa;
+    margin: 0; /* Remove default margin */
+    overflow: hidden; /* Prevent scrollbars on body */
+}
+
+.navbar {
+    background-color: #007bff;
+}
+
+.navbar-brand, .navbar-nav .nav-link {
+    color: #fff !important;
+}
+
+.sidebar {
+    height: 100vh; /* Full height */
+    background-color: #343a40;
+    padding: 1rem;
+    position: fixed; /* Fix to the left */
+    width: 200px; /* Fixed width */
+    overflow-y: auto; /* Allow scrolling for long sidebar content */
+}
+
+.sidebar a {
+    color: #adb5bd;
+    text-decoration: none;
+    display: block;
+    padding: 0.5rem 1rem;
+}
+
+.sidebar a:hover {
+    background-color: #495057;
+    border-radius: 5px;
+}
+
+.main-content {
+    margin-left: 200px; /* Offset by sidebar width */
+    padding: 2rem;
+    height: calc(100vh - 56px); /* Full height minus navbar height */
+    overflow-y: auto; /* Allow scrolling for long content */
+}
+
+.card {
+    margin-bottom: 1rem;
+}
+
+.table th, .table td {
+    vertical-align: middle;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border: none;
+}
+
+.btn-danger:hover {
+    background-color: #bd2130;
+}
+
+.form-control {
+    margin-bottom: 1rem;
+}
+
+.text-muted {
+    font-size: 0.875rem;
+}
