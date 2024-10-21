@@ -2,7 +2,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "mangement"; // Name of your database
+$dbname = "mangement";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -82,27 +82,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="stylesheet" href="login.css"> <!-- Link to your CSS file -->
+<link rel="stylesheet" href="signup.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
 </head>
 <body>
-    <h2>Login</h2>
-    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-        <div>
-            <label>Email</label>
-            <input type="text" name="email" value="">
-            <span><?php echo $email_err; ?></span>
-        </div>    
-        <div>
-            <label>Password</label>
-            <input type="password" name="password" value="">
-            <span><?php echo $password_err; ?></span>
+    <div class="container">
+        <div class="form-container">
+            <h1>Login</h1>
+            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="text" name="email" value="">
+                    <span class="error"><?php echo $email_err; ?></span>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" value="">
+                    <span class="error"><?php echo $password_err; ?></span>
+                </div>
+                <div class="form-group">
+                    <button type="submit">Login</button>
+                </div>
+            </form>
+            <div class="toggle-container">
+                <span>Don't have an account?</span>
+                <a href="signup.php" class="toggle-btn">Sign Up</a>
+            </div>
         </div>
-        <div>
-            <input type="submit" value="Login">
-        </div>
-    </form>
+    </div>
 </body>
 </html>
