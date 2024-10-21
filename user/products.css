@@ -1,0 +1,11 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.card {
+    border: 1px solid #007bff;
+}
+
+footer {
+    margin-top: 20px;
+}
