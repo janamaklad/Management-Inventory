@@ -4,7 +4,7 @@ session_start();
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "management-inventory1";
+$dbname = "mangement";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -69,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->bind_param("sss", $param_name, $param_email, $param_password);
             $param_name = $name;
             $param_email = $email;
-            $param_password = password_hash($password, PASSWORD_DEFAULT);
+            $param_password = $password;
 
             if ($stmt->execute()) {
                 session_unset();
