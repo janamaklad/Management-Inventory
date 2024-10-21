@@ -2,6 +2,7 @@
 include '../db.php';
 include 'AdminNavBar.php';
 // Handle Create/Update Supplier
+// Handle Create/Update Supplier
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $supplier_name = $_POST['supplier_name'];
     $contact_info = $_POST['contact_info'];
@@ -20,16 +21,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($stmt->execute()) {
         if (empty($_POST['supplier_id'])) {
+            // If a new supplier is added, redirect with a 'new' status
             $new_supplier_id = $conn->insert_id; // Gets the last inserted ID
-            echo "New supplier added successfully with ID: " . $new_supplier_id;
+            header("Location: suppliers.php?status=created");
         } else {
-            echo "Supplier updated successfully.";
+            // Redirect with a success status when updated
+            header("Location: suppliers.php?status=updated");
         }
+        exit(); // Ensure the script stops after redirection
     } else {
         echo "Error: " . $stmt->error;
     }
     $stmt->close();
 }
+
 
 // Handle Delete Supplier
 if (isset($_GET['delete'])) {
@@ -38,13 +43,14 @@ if (isset($_GET['delete'])) {
     $stmt->bind_param("i", $supplier_id);
 
     if ($stmt->execute()) {
-        echo "Supplier deleted successfully.";
+        // Redirect with a delete status after successful deletion
+        header("Location: suppliers.php?status=deleted");
+        exit(); // Ensure the script stops after redirection
     } else {
         echo "Error deleting supplier: " . $stmt->error;
     }
     $stmt->close();
 }
-
 // Fetch all suppliers
 $sql = "SELECT * FROM suppliers";
 $result = $conn->query($sql);
@@ -59,11 +65,63 @@ $result = $conn->query($sql);
     <title>Suppliers Management</title>
     <link rel="stylesheet" href="Admin.css"> 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
     <div class="container mt-5">
         <h2>Suppliers Management</h2>
+        <!-- Bootstrap Alert Modal -->
+<div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="statusModalLabel">Status</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="statusMessage" class="alert alert-success" role="alert">
+          <!-- Status message will go here -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Supplier Modal -->
+<div class="modal fade" id="editSupplierModal" tabindex="-1" aria-labelledby="editSupplierModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editSupplierModalLabel">Update Supplier</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="editSupplierForm" method="post" action="suppliers.php">
+          <input type="hidden" name="supplier_id" id="supplier_id">
+          <div class="mb-3">
+            <label for="supplier_name" class="form-label">Supplier Name</label>
+            <input type="text" class="form-control" id="supplier_name" name="supplier_name" required>
+          </div>
+          <div class="mb-3">
+            <label for="contact_info" class="form-label">Contact Info</label>
+            <input type="text" class="form-control" id="contact_info" name="contact_info" required>
+          </div>
+          <div class="mb-3">
+            <label for="payment_terms" class="form-label">Payment Terms</label>
+            <input type="text" class="form-control" id="payment_terms" name="payment_terms" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Update Supplier</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
         <!-- Suppliers Table -->
         <h3>Supplier List</h3>
@@ -84,8 +142,22 @@ $result = $conn->query($sql);
                             <td><?php echo $row['contact_info']; ?></td>
                             <td><?php echo $row['payment_terms']; ?></td>
                             <td>
-                                <a href="suppliers.php?edit=<?php echo $row['id']; ?>" class="btn btn-primary btn-sm">Edit</a>
-                                <a href="suppliers.php?delete=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm">Delete</a>
+ <!-- Updated Edit Button -->
+ <a href="#" class="btn btn-primary btn-sm editBtn" 
+                           data-bs-toggle="modal" 
+                           data-bs-target="#editSupplierModal"
+                           data-id="<?php echo $row['id']; ?>"
+                           data-name="<?php echo $row['supplier_name']; ?>"
+                           data-contact="<?php echo $row['contact_info']; ?>"
+                           data-terms="<?php echo $row['payment_terms']; ?>">
+                           Edit
+                        </a>      
+                        
+                    <!-- Delete Button with Confirmation -->
+                     <!-- Delete Button with Confirmation -->
+<a href="suppliers.php?delete=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" 
+    onclick="return confirm('Are you sure you want to delete this supplier?')">Delete</a>
+
                             </td>
                         </tr>
                     <?php endwhile; ?>
@@ -119,9 +191,12 @@ $result = $conn->query($sql);
             <button type="submit" class="btn btn-primary mt-2"><?php echo isset($_GET['edit']) ? 'Update Supplier' : 'Add Supplier'; ?></button>
         </form>
     </div>
+    <button class="btn btn-secondary mt-3" onclick="window.location.href='admin.php'">Back to Admin</button>
+
 </body>
 
 </html>
+<script src="script.js"></script>
 
 <?php
 // Close connection
