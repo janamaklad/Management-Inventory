@@ -1,10 +1,6 @@
 <?php
 // Include database connection
 include('../db.php');
-
-// Fetch products from the database
-$sql = "SELECT * FROM products";
-$result = $conn->query($sql);
 ?>
 
 <!DOCTYPE html>
@@ -17,23 +13,8 @@ $result = $conn->query($sql);
     <link rel="stylesheet" href="products.css">
 </head>
 <body>
-    <header class="bg-primary text-white text-center py-3">
-        <h1>Inventory Management System</h1>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#">IMS</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item"><a class="nav-link" href="#">Products</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">About</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Login</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Signup</a></li>
-                </ul>
-            </div>
-        </nav>
+<header class="text-white text-center py-3">
+        <?php include('../navbar.php'); ?> <!-- Include the navbar -->
     </header>
 
     <div class="container mt-4">
@@ -57,6 +38,10 @@ $result = $conn->query($sql);
 
         <div class="row" id="productContainer">
             <?php
+            // Fetch products from the database
+            $sql = "SELECT * FROM products";
+            $result = $conn->query($sql);
+
             // Check if there are products in the database
             if ($result->num_rows > 0) {
                 // Loop through and display products
@@ -70,7 +55,7 @@ $result = $conn->query($sql);
                     echo '          <p class="card-text">Price: $' . $row["Price"] . '</p>';
                     echo '          <p class="card-text">Seller: ' . $row["SellerName"] . '</p>';
                     echo '          <p class="card-text">Quantity: ' . $row["Quantity"] . '</p>';
-                    echo '          <button class="btn btn-primary" onclick="addToCart(\'' . $row["ProductName"] . '\')">Add to Cart</button>';
+                    echo '          <button class="btn btn-success" onclick="addToCart(\'' . $row["ProductName"] . '\')">Add to Cart</button>'; // Updated to green button
                     echo '      </div>';
                     echo '  </div>';
                     echo '</div>';
@@ -91,7 +76,4 @@ $result = $conn->query($sql);
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="products.js"></script>
 </body>
-
-
 </html>
-

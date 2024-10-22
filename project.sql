@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 22, 2024 at 10:18 PM
+-- Generation Time: Oct 22, 2024 at 11:59 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -76,10 +76,13 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`ID`, `ProductName`, `Price`, `SellerName`, `Picture`, `Quantity`, `image_url`) VALUES
-(1, 'Product A', 100, '', '', 0, NULL),
-(2, 'Product B', 0, '', '', 0, NULL),
-(3, 'Product C', 0, '', '', 0, NULL),
-(7, 'chocolate', 20, 'ABC Store', '', 50, '/Management-Inventory/images/vegan-milk-chocolate-recipe.jpg');
+(1, 'Tea', 100, 'Lipton', '', 40, '\\Management-Inventory\\images\\tea.jpg'),
+(2, 'Nescafe', 50, 'Nestle', '', 30, '\\Management-Inventory\\images\\nescafe.jpg'),
+(3, 'Ice cream', 40, 'Nestle', '', 20, '\\Management-Inventory\\images\\ice cream.webp'),
+(7, 'chocolate', 20, 'Dairy Milk', '', 50, '/Management-Inventory/images/vegan-milk-chocolate-recipe.jpg'),
+(11, 'Redbull', 70, 'redbull', '', 50, '\\Management-Inventory\\images\\redbull.png'),
+(12, 'croissant', 20, 'TBS', '', 50, '/Management-Inventory/images/images.jpg'),
+(13, 'TOMATO', 10, 'tomato', '', 50, '\\Management-Inventory\\images\\TOMATO.jpg');
 
 -- --------------------------------------------------------
 
@@ -209,7 +212,7 @@ ALTER TABLE `pages`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `suppliers`

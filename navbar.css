@@ -1,0 +1,61 @@
+/* General navbar styles */
+.navbar {
+    background-color: white;
+    border-bottom: 1px solid #ddd;
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 1000;
+    line-height: 60px; /* Set a fixed line-height to prevent navbar expansion */
+    height: 70px; /* Control the navbar's height */
+    overflow: visible; /* Allow logo to overflow if larger */
+}
+
+/* Navbar brand logo or text */
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    height: 100%; /* Ensure brand height doesn't affect navbar size */
+}
+
+/* Adjust the logo size without changing navbar size */
+.navbar-brand img {
+    height: 140px; /* Increase the logo size */
+    width: auto;  /* Maintain aspect ratio */
+    position: relative;
+    top: -50px; /* Adjust the position to center it visually */
+}
+
+/* Link styles */
+.navbar-nav .nav-item .nav-link {
+    color: #333;
+    font-size: 1.1rem;
+    padding: 10px 15px;
+    transition: color 0.3s ease, box-shadow 0.3s ease;
+    line-height: 60px; /* Keep link items aligned with navbar height */
+}
+
+
+/* Navbar toggler for mobile */
+.navbar-toggler {
+    border: none;
+}
+
+/* Navbar collapse */
+.navbar-collapse {
+    justify-content: flex-end;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 992px) {
+    .navbar {
+        padding: 10px;
+        line-height: normal; /* Adjust line-height for mobile */
+        height: auto;
+    }
+
+    .navbar-nav .nav-item {
+        text-align: center;
+    }
+}

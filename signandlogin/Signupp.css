@@ -22,8 +22,9 @@ body {
 }
 
 .logo {
-    width: 160px; /* Adjust logo size */
-    height: auto; /* Maintain aspect ratio */
+    height: 140px; /* Increase the logo size */
+    width: auto;  /* Maintain aspect ratio */
+    margin-top: 15px; /* Adjust this value to move the logo down */
 }
 
 .back-home {
