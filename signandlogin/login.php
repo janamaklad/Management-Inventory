@@ -85,12 +85,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="signup.css">
+    <link rel="stylesheet" href="Signupp.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
 </head>
 <body>
+<div class="header">
+        <img src="\Management-Inventory\images\logo.png" alt="Logo" class="logo"> <!-- Update path to your logo image -->
+        <button class="back-home" onclick="window.location.href='../Homepage.php'">Back to Home</button>
+    </div>
     <div class="container">
         <div class="form-container">
             <h1>Login</h1>

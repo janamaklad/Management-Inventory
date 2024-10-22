@@ -55,7 +55,7 @@ main {
     justify-content: center;
     align-items: center;
     flex: 1;
-    background: url('photos/supermarket.jpg') no-repeat center;
+    background: url('images/supermarket.jpg') no-repeat center;
     background-size: cover;
 }
 

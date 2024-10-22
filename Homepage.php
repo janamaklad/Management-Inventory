@@ -24,7 +24,7 @@
         <div class="content">
             <h1>FreshMart Inventory</h1>
             <p>Welcome to FreshMart – Freshness delivered daily!</p>
-            <a href="product/products.php" class="discover-btn">Discover more</a>
+            <a href="user/products.php" class="discover-btn">Discover more</a>
         </div>
     </main>
 </body>
