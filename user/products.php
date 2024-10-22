@@ -50,8 +50,6 @@ $result = $conn->query($sql);
                     <option value="coffee and tea">Coffee and Tea</option>
                     <option value="Groceries">Groceries</option>
                     <option value="Bakery">Bakery</option>
-                    <option value="Meat and Fish">Meat and Fish</option>
-                    <option value="Sauces">Sauces</option>
                     <option value="Drinks">Drinks</option>
                 </select>
             </div>
@@ -93,4 +91,7 @@ $result = $conn->query($sql);
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="products.js"></script>
 </body>
+
+
 </html>
+
