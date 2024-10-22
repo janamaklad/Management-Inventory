@@ -55,10 +55,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } elseif (strlen(trim($_POST["password"])) < 6) {
         $_SESSION['password_err'] = "Password must have at least 6 characters.";
         $has_error = true;
-    } elseif (!preg_match("/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W]).+$/", $_POST["password"])) {
+    } elseif (!preg_match("/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).+$/", $_POST["password"])) {
         $_SESSION['password_err'] = "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.";
         $has_error = true;
-    } else {
+    }else {
         $password = trim($_POST["password"]);
         unset($_SESSION['password_err']);
     }
@@ -84,7 +84,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->bind_param("sss", $param_name, $param_email, $param_password);
             $param_name = $name;
             $param_email = $email;
-            $param_password =$password;
+          //  $param_password = $password;
+            $param_password = password_hash($password, PASSWORD_DEFAULT); 
             if ($stmt->execute()) {
                 session_unset(); // Clear session data
                 session_destroy(); // Destroy the session
