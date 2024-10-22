@@ -36,10 +36,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 
-// Handle Delete Supplier
+// Handle Delete Supplier (Soft Delete)
 if (isset($_GET['delete'])) {
     $supplier_id = $_GET['delete'];
-    $stmt = $conn->prepare("DELETE FROM suppliers WHERE id=?");
+
+    // Soft Delete by updating `is_deleted` field
+    $stmt = $conn->prepare("UPDATE suppliers SET is_deleted = 1 WHERE id=?");
     $stmt->bind_param("i", $supplier_id);
 
     if ($stmt->execute()) {
@@ -47,13 +49,15 @@ if (isset($_GET['delete'])) {
         header("Location: suppliers.php?status=deleted");
         exit(); // Ensure the script stops after redirection
     } else {
-        echo "Error deleting supplier: " . $stmt->error;
+        echo "Error updating supplier: " . $stmt->error;
     }
     $stmt->close();
 }
-// Fetch all suppliers
-$sql = "SELECT * FROM suppliers";
+
+// Fetch all suppliers (excluding deleted ones)
+$sql = "SELECT * FROM suppliers WHERE is_deleted = 0";
 $result = $conn->query($sql);
+
 ?>
 
 <!DOCTYPE html>
