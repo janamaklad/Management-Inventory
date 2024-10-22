@@ -18,6 +18,7 @@
         <a href="#">Stock Management</a>
         <a href="Suppliers.php">Suppliers</a>
         <a href="#">Reports</a>
+        <a href="orders.php">Orders</a>
         <a href="#">Settings</a>
     </div>
 

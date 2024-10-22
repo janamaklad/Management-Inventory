@@ -65,8 +65,8 @@ $result = $conn->query($sql);
                 while ($row = $result->fetch_assoc()) {
                     echo '<div class="col-md-3">';
                     echo '  <div class="card mb-4">';
-                    // Link to the view_image.php script with product ID
-                    echo '      <img src="ImageView.php?id=' . $row["ID"] . '" class="card-img-top" alt="Product Image">';
+                    // Directly use the image URL from the database for the image source
+                    echo '      <img src="' . $row["image_url"] . '" class="card-img-top" alt="Product Image">';
                     echo '      <div class="card-body">';
                     echo '          <h5 class="card-title">' . $row["ProductName"] . '</h5>';
                     echo '          <p class="card-text">Price: $' . $row["Price"] . '</p>';
