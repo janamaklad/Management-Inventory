@@ -4,7 +4,7 @@ session_start();
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "management-inventory1";
+$dbname = "mangement";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
