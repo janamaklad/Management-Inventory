@@ -54,7 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit(); 
     } else {
         // Create new user (insert into the users table)
-        $stmt_user = $conn->prepare("INSERT INTO users (Name, Email, Password, Usertypeid) VALUES (?, ?, ?, ?)");
+        $stmt_user = $conn->prepare("INSERT INTO users (Name, Email, Password, usertype_id) VALUES (?, ?, ?, ?)");
         $usertype_id = 2; // Assuming '2' represents supplier
         $stmt_user->bind_param("sssi", $supplier_name, $email, $hashed_password, $usertype_id);
         $stmt_user->execute();
