@@ -51,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $_SESSION["name"] = $name;
 
                             // Redirect user to welcome page
-                            header("location: ./Homepage.php");
+                            header("location: ../Homepage.php");
                         } else {
                             $password_err = "The password you entered was not valid.";
                         }
