@@ -1,15 +1,6 @@
 <?php
 session_start();
-$servername = "localhost"; 
-$username = "root";
-$password = ""; 
-$dbname = "newmanagment"; 
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include '../db.php';
 
 // Fetch user data based on user ID
 if (isset($_GET['id'])) {
