@@ -1,16 +1,6 @@
 <?php
 
-$servername = "localhost"; 
-$username = "root";
-$password = ""; 
-$dbname = "newmanagment"; 
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
+include '../db.php';
 // Function to check password strength
 function validatePassword($password) {
     return preg_match("/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{6,}$/", $password);

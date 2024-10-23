@@ -1,16 +1,7 @@
 <?php
 session_start();
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "newmanagment";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include '../db.php';
 
 $name = $email = $password = $confirm_password = "";
 
@@ -88,7 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($stmt->execute()) {
                 session_unset(); // Clear session data
                 session_destroy(); // Destroy the session
-                header("location: ../user/products.php");
+                header("location: ../Homepage.php");
                 exit();
             }
             $stmt->close();
