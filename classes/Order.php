@@ -7,53 +7,49 @@ class Order {
     }
 
     public function createOrder($product_id, $supplier_id, $quantity) {
-        // Start transaction
         $this->conn->begin_transaction();
-
         try {
-            // Insert order into orders table
+            $product = new Product($this->conn, $product_id);
+
+            if ($product->getStock() < $quantity) {
+                throw new Exception("Not enough stock available.");
+            }
+
             $sql = "INSERT INTO orders (product_id, supplier_id, quantity, order_date, status) VALUES (?, ?, ?, NOW(), 'Pending')";
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param("iii", $product_id, $supplier_id, $quantity);
             $stmt->execute();
-            $stmt->close();
 
-            // Reduce stock and calculate sales in Product class
-            $product = new Product($this->conn, $product_id);
-            $product->reduceStock($quantity); // Reduce stock
-            $product->increaseSales($quantity); // Increase sales
+            $product->reduceStock($quantity);
 
-            // Commit transaction
             $this->conn->commit();
+            return "Order created successfully!";
         } catch (Exception $e) {
-            // Rollback if an error occurs
             $this->conn->rollback();
             throw new Exception("Failed to create order: " . $e->getMessage());
         }
     }
 
     public function fetchOrders() {
-        $sql = "SELECT o.id, p.ProductName, s.supplier_name, o.quantity, o.order_date, o.status 
-                FROM orders o 
-                JOIN products p ON o.product_id = p.id 
-                JOIN suppliers s ON o.supplier_id = s.id";
+        $sql = "SELECT orders.id, products.ProductName, suppliers.supplier_name, orders.quantity, orders.order_date, orders.status
+                FROM orders
+                JOIN products ON orders.product_id = products.id
+                JOIN suppliers ON orders.supplier_id = suppliers.id";
         return $this->conn->query($sql);
-    }
-
-    public function updateOrder($order_id, $quantity, $status) {
-        $sql = "UPDATE orders SET quantity = ?, status = ? WHERE id = ?";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("isi", $quantity, $status, $order_id);
-        $stmt->execute();
-        $stmt->close();
     }
 
     public function deleteOrder($order_id) {
         $sql = "DELETE FROM orders WHERE id = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $order_id);
-        $stmt->execute();
-        $stmt->close();
+        return $stmt->execute();
+    }
+
+    public function updateOrder($order_id, $quantity, $status) {
+        $sql = "UPDATE orders SET quantity = ?, status = ? WHERE id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("isi", $quantity, $status, $order_id);
+        return $stmt->execute();
     }
 }
 ?>
