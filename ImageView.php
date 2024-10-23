@@ -1,33 +1,30 @@
 <?php
-// Include database connection
-include('../db.php'); // Adjust this path based on your directory structure
+// Step 1: Connect to the database
+$conn = new mysqli('localhost', 'username', 'password', 'database');
 
-// Check if the connection was successful
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
+// Check for connection errors
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
 
-// Get the product ID from the query string
-$id = intval($_GET['id']); // Sanitize the input
+// Step 2: Retrieve the binary data (BLOB)
+$productId = 1; // Example product ID
+$sql = "SELECT Picture FROM products WHERE id = $productId";
+$result = $conn->query($sql);
 
-// Prepare the SQL statement to fetch the image
-$stmt = $conn->prepare("SELECT Picture FROM products WHERE ID = ?"); // Use ID instead of id
-$stmt->bind_param("i", $id);
-$stmt->execute();
-$stmt->store_result();
-$stmt->bind_result($imageData);
-$stmt->fetch();
+if ($result->num_rows > 0) {
+    // Step 3: Fetch the binary data (BLOB)
+    $row = $result->fetch_assoc();
+    $imageData = $row['Picture'];
 
-// Check if the image exists
-if ($stmt->num_rows > 0) {
-    header("Content-Type: image/jpeg"); // Set the content type (adjust if needed)
-    echo $imageData; // Output the image data
+    // Step 4: Set the header to display the image in the browser
+    header("Content-Type: image/jpeg"); // Change the MIME type based on the image type (e.g., "image/png", "image/gif")
+
+    // Step 5: Output the image data
+    echo $imageData;
 } else {
-    echo "Image not found."; // Message for missing image
-    // Debugging: Output image data and query information
-    echo "No rows returned for ID: " . $id; // Show the ID being queried
+    echo "No image found!";
 }
 
-$stmt->close();
 $conn->close();
 ?>

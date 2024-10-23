@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 21, 2024 at 08:59 PM
+-- Generation Time: Oct 22, 2024 at 11:59 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -41,10 +41,7 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `product_id`, `supplier_id`, `quantity`, `order_date`, `status`) VALUES
-(1, 3, 21, 5, '2024-10-21 20:47:58', 'pending'),
-(2, 3, 21, 5, '2024-10-21 20:54:58', 'pending'),
-(3, 3, 18, 4, '2024-10-21 20:55:34', 'pending'),
-(4, 1, 18, 4, '2024-10-21 21:58:03', 'pending');
+(15, 1, 18, 8, '2024-10-22 20:52:02', '');
 
 -- --------------------------------------------------------
 
@@ -70,17 +67,22 @@ CREATE TABLE `products` (
   `Price` int(11) NOT NULL,
   `SellerName` text NOT NULL,
   `Picture` blob NOT NULL,
-  `Quantity` int(11) NOT NULL
+  `Quantity` int(11) NOT NULL,
+  `image_url` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `products`
 --
 
-INSERT INTO `products` (`ID`, `ProductName`, `Price`, `SellerName`, `Picture`, `Quantity`) VALUES
-(1, 'Product A', 0, '', '', 0),
-(2, 'Product B', 0, '', '', 0),
-(3, 'Product C', 0, '', '', 0);
+INSERT INTO `products` (`ID`, `ProductName`, `Price`, `SellerName`, `Picture`, `Quantity`, `image_url`) VALUES
+(1, 'Tea', 100, 'Lipton', '', 40, '\\Management-Inventory\\images\\tea.jpg'),
+(2, 'Nescafe', 50, 'Nestle', '', 30, '\\Management-Inventory\\images\\nescafe.jpg'),
+(3, 'Ice cream', 40, 'Nestle', '', 20, '\\Management-Inventory\\images\\ice cream.webp'),
+(7, 'chocolate', 20, 'Dairy Milk', '', 50, '/Management-Inventory/images/vegan-milk-chocolate-recipe.jpg'),
+(11, 'Redbull', 70, 'redbull', '', 50, '\\Management-Inventory\\images\\redbull.png'),
+(12, 'croissant', 20, 'TBS', '', 50, '/Management-Inventory/images/images.jpg'),
+(13, 'TOMATO', 10, 'tomato', '', 50, '\\Management-Inventory\\images\\TOMATO.jpg');
 
 -- --------------------------------------------------------
 
@@ -92,19 +94,18 @@ CREATE TABLE `suppliers` (
   `id` int(11) NOT NULL,
   `supplier_name` varchar(255) NOT NULL,
   `contact_info` varchar(255) NOT NULL,
-  `payment_terms` varchar(255) NOT NULL
+  `payment_terms` varchar(255) NOT NULL,
+  `is_deleted` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `suppliers`
 --
 
-INSERT INTO `suppliers` (`id`, `supplier_name`, `contact_info`, `payment_terms`) VALUES
-(18, 'juhaina', '4', 'hfn'),
-(20, 'Supplier X', '', ''),
-(21, 'Supplier Y', '', ''),
-(22, 'Supplier Z', '', ''),
-(23, 'juhaina', '45', 'hfn');
+INSERT INTO `suppliers` (`id`, `supplier_name`, `contact_info`, `payment_terms`, `is_deleted`) VALUES
+(18, 'juhaina', '0', 'hfn', 1),
+(24, 'juhaina', '45', 'hfn', 1),
+(25, 'juhaina', '45', 'hfn', 0);
 
 -- --------------------------------------------------------
 
@@ -199,7 +200,7 @@ ALTER TABLE `usertypes-pages`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `pages`
@@ -211,13 +212,13 @@ ALTER TABLE `pages`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `suppliers`
 --
 ALTER TABLE `suppliers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `users`

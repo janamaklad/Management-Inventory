@@ -1,0 +1,110 @@
+/* Reset some basic styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px; /* Keep padding to maintain a smaller header */
+    background-color: #ffffff; /* White background */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+    height: 100px; /* Set a fixed height for the header */
+}
+
+.logo {
+    height: 140px; /* Increase the logo size */
+    width: auto;  /* Maintain aspect ratio */
+    margin-top: 15px; /* Adjust this value to move the logo down */
+}
+
+.back-home {
+    background-color: #f4f4f4; /* Light background for button */
+    border: 1px solid #ccc; /* Border for button */
+    padding: 5px 15px; /* Padding for button */
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.9em; /* Slightly smaller font */
+}
+
+.container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333; /* Adjust heading color */
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.error {
+    color: red;
+    font-size: 0.875em;
+}
+
+.toggle-btn {
+    cursor: pointer;
+    color: #115012; /* Change color if needed */
+    font-weight: bold;
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #115012; /* Green button */
+    color: white;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color:  #115012; /* Darker green on hover */
+}
+
+.toggle-container {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.toggle-container a {
+    color: #4CAF50; /* Change link color if needed */
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.toggle-container a:hover {
+    text-decoration: underline;
+}

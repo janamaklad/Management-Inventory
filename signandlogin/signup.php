@@ -58,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } elseif (!preg_match("/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).+$/", $_POST["password"])) {
         $_SESSION['password_err'] = "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.";
         $has_error = true;
-    }else {
+    } else {
         $password = trim($_POST["password"]);
         unset($_SESSION['password_err']);
     }
@@ -84,7 +84,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->bind_param("sss", $param_name, $param_email, $param_password);
             $param_name = $name;
             $param_email = $email;
-          //  $param_password = $password;
             $param_password = password_hash($password, PASSWORD_DEFAULT); 
             if ($stmt->execute()) {
                 session_unset(); // Clear session data
@@ -111,22 +110,18 @@ $conn->close();
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Signup</title>
-    <style>
-        .toggle-btn {
-            cursor: pointer;
-            font-size: 14px;
-            margin-left: 10px;
-        }
-        span.error {
-            color: red;
-        }
-    </style>
-    <link rel="stylesheet" href="signup.css">
+    <link rel="stylesheet" href="Signupp.css">
 </head>
 <body>
-<div class="container">
-    <div class="form-container">
+    <div class="header">
+        <img src="\Management-Inventory\images\logo.png" alt="Logo" class="logo"> <!-- Update path to your logo image -->
+        <button class="back-home" onclick="window.location.href='../Homepage.php'">Back to Home</button>
+    </div>
+
+    <div class="container">
         <h1>Sign Up</h1>
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <div class="form-group">
@@ -160,13 +155,12 @@ $conn->close();
             <a href="login.php" class="toggle-btn">Login</a>
         </div>
     </div>
-</div>
 
-<script>
-    function togglePassword(id) {
-        var input = document.getElementById(id);
-        input.type = (input.type === "password") ? "text" : "password";
-    }
-</script>
+    <script>
+        function togglePassword(id) {
+            var input = document.getElementById(id);
+            input.type = (input.type === "password") ? "text" : "password";
+        }
+    </script>
 </body>
 </html>

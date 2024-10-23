@@ -2,7 +2,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "mangement";
+$dbname = "project";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -11,6 +11,9 @@ if ($conn->connect_error) {
 }
 
 $email = $password = "";
+
+
+
 $email_err = $password_err = "";
 session_start();
 
@@ -19,7 +22,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["email"]) && empty(trim($_POST["email"]))) {
         $email_err = "Please enter your email.";
     } else {
-
         $email = trim($_POST["email"]);
     }
 
@@ -49,7 +51,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     // Bind result variables
                     $stmt->bind_result($id, $name, $hashed_password);
                     if ($stmt->fetch()) {
-                        if ($password === $hashed_password) {
+                        // Use password_verify to check the password against the hashed password
+                        if (password_verify($password, $hashed_password)) {
                             // Password is correct, so start a new session
                             session_start();
                             // Store data in session variables
@@ -82,12 +85,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="stylesheet" href="signup.css">
+    <link rel="stylesheet" href="Signupp.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
 </head>
 <body>
+<div class="header">
+        <img src="\Management-Inventory\images\logo.png" alt="Logo" class="logo"> <!-- Update path to your logo image -->
+        <button class="back-home" onclick="window.location.href='../Homepage.php'">Back to Home</button>
+    </div>
     <div class="container">
         <div class="form-container">
             <h1>Login</h1>
