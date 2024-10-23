@@ -1,5 +1,6 @@
 <?php
-include '../db.php';
+// Include database connection file
+include '../db.php'; 
 include 'AdminNavBar.php';
 ?>
 
@@ -17,7 +18,7 @@ include 'AdminNavBar.php';
 <body>
     <div class="container mt-4">
         <h1 class="mb-4">Reports Dashboard</h1>
-        
+
         <!-- Filtering and Search -->
         <div class="row mb-3">
             <div class="col-md-4">
@@ -45,22 +46,25 @@ include 'AdminNavBar.php';
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Sample Data -->
-                        <tr>
-                            <td>1</td>
-                            <td>Sales Report</td>
-                            <td>2024-10-20</td>
-                            <td>Monthly sales report for September</td>
-                            <td><a href="#" class="btn btn-primary btn-sm">View</a></td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Inventory Report</td>
-                            <td>2024-10-19</td>
-                            <td>Inventory stock level as of October</td>
-                            <td><a href="#" class="btn btn-primary btn-sm">View</a></td>
-                        </tr>
-                        <!-- Add more rows here dynamically -->
+                        <?php
+                        // Example data fetch for sales reports
+                        $sql = "SELECT id, report_type, report_date, details FROM reports";
+                        $result = $conn->query($sql);
+
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                echo "<tr>
+                                    <td>{$row['id']}</td>
+                                    <td>{$row['report_type']}</td>
+                                    <td>{$row['report_date']}</td>
+                                    <td>{$row['details']}</td>
+                                    <td><a href='#' class='btn btn-primary btn-sm'>View</a></td>
+                                  </tr>";
+                            }
+                        } else {
+                            echo "<tr><td colspan='5'>No reports found.</td></tr>";
+                        }
+                        ?>
                     </tbody>
                 </table>
             </div>
@@ -73,44 +77,62 @@ include 'AdminNavBar.php';
                 <canvas id="salesChart"></canvas> <!-- Chart Placeholder -->
             </div>
             <div class="col-md-6">
-                <h3>Inventory Overview</h3>
-                <canvas id="inventoryChart"></canvas> <!-- Chart Placeholder -->
+                <h3>Stock Overview</h3>
+                <canvas id="stockChart"></canvas> <!-- Canvas for stock chart -->
             </div>
         </div>
     </div>
 
     <script>
-        // Chart.js example
+    // Fetch the data from report_data.php
+    $.getJSON('report_data.php', function(data) {
+        // Sales Chart
         var salesCtx = document.getElementById('salesChart').getContext('2d');
         var salesChart = new Chart(salesCtx, {
-            type: 'line',
+            type: 'bar',
             data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                labels: data.sales.labels,
                 datasets: [{
-                    label: 'Sales',
-                    data: [100, 200, 150, 300, 250, 400, 350],
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
+                    label: 'Sales Revenue',
+                    data: data.sales.data,
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
                     borderWidth: 1
                 }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
             }
         });
 
-        // Inventory Chart Example
-        var inventoryCtx = document.getElementById('inventoryChart').getContext('2d');
-        var inventoryChart = new Chart(inventoryCtx, {
+        // Stock Chart
+        var stockCtx = document.getElementById('stockChart').getContext('2d');
+        var stockChart = new Chart(stockCtx, {
             type: 'bar',
             data: {
-                labels: ['Product A', 'Product B', 'Product C', 'Product D'],
+                labels: data.stock.labels,
                 datasets: [{
-                    label: 'Stock',
-                    data: [50, 100, 75, 125],
-                    backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)', 'rgba(75, 192, 192, 0.2)'],
-                    borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)'],
+                    label: 'Stock Levels',
+                    data: data.stock.data,
+                    backgroundColor: 'rgba(255, 206, 86, 0.6)',
+                    borderColor: 'rgba(255, 206, 86, 1)',
                     borderWidth: 1
                 }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
             }
         });
+    });
     </script>
+
 </body>
 </html>
