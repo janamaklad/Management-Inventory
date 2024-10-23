@@ -1,40 +1,56 @@
 <?php
 include '../db.php';
 include 'AdminNavBar.php';
-// Handle Create/Update Supplier
+
 // Handle Create/Update Supplier
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $supplier_name = $_POST['supplier_name'];
+    $supplier_name = $_POST['supplier_name']; // Capturing supplier name
     $contact_info = $_POST['contact_info'];
     $payment_terms = $_POST['payment_terms'];
+    
+    // Capturing user details
+    $name = $_POST['name']; 
+    $email = $_POST['email'];
+    $password = password_hash($_POST['password'], PASSWORD_BCRYPT); // Hash the password for security
 
     // Check if it's an update operation
     if (isset($_POST['supplier_id']) && !empty($_POST['supplier_id'])) {
         $supplier_id = $_POST['supplier_id'];
-        $stmt = $conn->prepare("UPDATE suppliers SET supplier_name=?, contact_info=?, payment_terms=? WHERE id=?");
-        $stmt->bind_param("sssi", $supplier_name, $contact_info, $payment_terms, $supplier_id);
-    } else {
-        // Create new supplier
-        $stmt = $conn->prepare("INSERT INTO suppliers (supplier_name, contact_info, payment_terms) VALUES (?, ?, ?)");
-        $stmt->bind_param("sss", $supplier_name, $contact_info, $payment_terms);
-    }
 
-    if ($stmt->execute()) {
-        if (empty($_POST['supplier_id'])) {
-            // If a new supplier is added, redirect with a 'new' status
-            $new_supplier_id = $conn->insert_id; // Gets the last inserted ID
-            header("Location: suppliers.php?status=created");
-        } else {
-            // Redirect with a success status when updated
-            header("Location: suppliers.php?status=updated");
-        }
-        exit(); // Ensure the script stops after redirection
+        // Update user details in the users table
+        $stmt_user = $conn->prepare("UPDATE users SET Name=?, Email=?, Password=? WHERE id=(SELECT user_id FROM suppliers WHERE id=?)");
+        $stmt_user->bind_param("sssi", $name, $email, $password, $supplier_id);
+        $stmt_user->execute();
+        $stmt_user->close();
+
+        // Update supplier details
+        $stmt_supplier = $conn->prepare("UPDATE suppliers SET supplier_name=?, contact_info=?, payment_terms=? WHERE id=?");
+        $stmt_supplier->bind_param("sssi", $supplier_name, $contact_info, $payment_terms, $supplier_id);
+        $stmt_supplier->execute();
+        $stmt_supplier->close();
+        
+        header("Location: suppliers.php?status=updated");
+        exit(); 
     } else {
-        echo "Error: " . $stmt->error;
+        // Create new user
+        $stmt_user = $conn->prepare("INSERT INTO users (Name, Email, Password, `Usertype-id`) VALUES (?, ?, ?, ?)");
+        $usertype_id = 2; // Assuming '2' represents supplier
+        $stmt_user->bind_param("sssi", $name, $email, $password, $usertype_id);
+        $stmt_user->execute();
+
+        // Get the last inserted user ID to associate it with the supplier
+        $new_user_id = $conn->insert_id;
+
+        // Create new supplier and associate with user
+        $stmt_supplier = $conn->prepare("INSERT INTO suppliers (user_id, supplier_name, contact_info, payment_terms) VALUES (?, ?, ?, ?)");
+        $stmt_supplier->bind_param("isss", $new_user_id, $supplier_name, $contact_info, $payment_terms);
+        $stmt_supplier->execute();
+        $stmt_supplier->close();
+        
+        header("Location: suppliers.php?status=created");
+        exit(); 
     }
-    $stmt->close();
 }
-
 
 // Handle Delete Supplier (Soft Delete)
 if (isset($_GET['delete'])) {
@@ -47,7 +63,7 @@ if (isset($_GET['delete'])) {
     if ($stmt->execute()) {
         // Redirect with a delete status after successful deletion
         header("Location: suppliers.php?status=deleted");
-        exit(); // Ensure the script stops after redirection
+        exit();
     } else {
         echo "Error updating supplier: " . $stmt->error;
     }
@@ -69,63 +85,12 @@ $result = $conn->query($sql);
     <title>Suppliers Management</title>
     <link rel="stylesheet" href="Admin.css"> 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
     <div class="container mt-5">
         <h2>Suppliers Management</h2>
-        <!-- Bootstrap Alert Modal -->
-<div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="statusModalLabel">Status</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div id="statusMessage" class="alert alert-success" role="alert">
-          <!-- Status message will go here -->
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Edit Supplier Modal -->
-<div class="modal fade" id="editSupplierModal" tabindex="-1" aria-labelledby="editSupplierModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="editSupplierModalLabel">Update Supplier</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form id="editSupplierForm" method="post" action="suppliers.php">
-          <input type="hidden" name="supplier_id" id="supplier_id">
-          <div class="mb-3">
-            <label for="supplier_name" class="form-label">Supplier Name</label>
-            <input type="text" class="form-control" id="supplier_name" name="supplier_name" required>
-          </div>
-          <div class="mb-3">
-            <label for="contact_info" class="form-label">Contact Info</label>
-            <input type="text" class="form-control" id="contact_info" name="contact_info" required>
-          </div>
-          <div class="mb-3">
-            <label for="payment_terms" class="form-label">Payment Terms</label>
-            <input type="text" class="form-control" id="payment_terms" name="payment_terms" required>
-          </div>
-          <button type="submit" class="btn btn-primary">Update Supplier</button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
 
         <!-- Suppliers Table -->
         <h3>Supplier List</h3>
@@ -146,22 +111,20 @@ $result = $conn->query($sql);
                             <td><?php echo $row['contact_info']; ?></td>
                             <td><?php echo $row['payment_terms']; ?></td>
                             <td>
- <!-- Updated Edit Button -->
- <a href="#" class="btn btn-primary btn-sm editBtn" 
-                           data-bs-toggle="modal" 
-                           data-bs-target="#editSupplierModal"
-                           data-id="<?php echo $row['id']; ?>"
-                           data-name="<?php echo $row['supplier_name']; ?>"
-                           data-contact="<?php echo $row['contact_info']; ?>"
-                           data-terms="<?php echo $row['payment_terms']; ?>">
-                           Edit
-                        </a>      
-                        
-                    <!-- Delete Button with Confirmation -->
-                     <!-- Delete Button with Confirmation -->
-<a href="suppliers.php?delete=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" 
-    onclick="return confirm('Are you sure you want to delete this supplier?')">Delete</a>
-
+                                <!-- Edit Button -->
+                                <a href="#" class="btn btn-primary btn-sm editBtn" 
+                                   data-bs-toggle="modal" 
+                                   data-bs-target="#editSupplierModal"
+                                   data-id="<?php echo $row['id']; ?>"
+                                   data-name="<?php echo $row['supplier_name']; ?>"
+                                   data-contact="<?php echo $row['contact_info']; ?>"
+                                   data-terms="<?php echo $row['payment_terms']; ?>">
+                                   Edit
+                                </a>      
+                                
+                                <!-- Delete Button -->
+                                <a href="suppliers.php?delete=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" 
+                                   onclick="return confirm('Are you sure you want to delete this supplier?')">Delete</a>
                             </td>
                         </tr>
                     <?php endwhile; ?>
@@ -175,32 +138,22 @@ $result = $conn->query($sql);
 
         <!-- Add/Edit Supplier Form -->
         <h3><?php echo isset($_GET['edit']) ? 'Edit Supplier' : 'Add New Supplier'; ?></h3>
-        <?php
-        // If editing, fetch the existing supplier data
-        if (isset($_GET['edit'])) {
-            $supplier_id = $_GET['edit'];
-            $stmt = $conn->prepare("SELECT * FROM suppliers WHERE id=?");
-            $stmt->bind_param("i", $supplier_id);
-            $stmt->execute();
-            $edit_result = $stmt->get_result();
-            $supplier = $edit_result->fetch_assoc();
-            $stmt->close();
-        }
-        ?>
         <form method="post" action="suppliers.php">
-            <input type="hidden" name="supplier_id" value="<?php echo isset($supplier['id']) ? $supplier['id'] : ''; ?>">
-            <input type="text" class="form-control" name="supplier_name" placeholder="Supplier Name" value="<?php echo isset($supplier['supplier_name']) ? $supplier['supplier_name'] : ''; ?>" required>
-            <input type="text" class="form-control" name="contact_info" placeholder="Contact Info" value="<?php echo isset($supplier['contact_info']) ? $supplier['contact_info'] : ''; ?>" required>
-            <input type="text" class="form-control" name="payment_terms" placeholder="Payment Terms" value="<?php echo isset($supplier['payment_terms']) ? $supplier['payment_terms'] : ''; ?>" required>
-            <button type="submit" class="btn btn-primary mt-2"><?php echo isset($_GET['edit']) ? 'Update Supplier' : 'Add Supplier'; ?></button>
+            <input type="text" class="form-control" name="name" placeholder="User Name" required>
+            <input type="email" class="form-control" name="email" placeholder="Email" required>
+            <input type="password" class="form-control" name="password" placeholder="Password" required>
+            <input type="text" class="form-control" name="supplier_name" placeholder="Supplier Name" required>
+            <input type="text" class="form-control" name="contact_info" placeholder="Contact Info" required>
+            <input type="text" class="form-control" name="payment_terms" placeholder="Payment Terms" required>
+            <button type="submit" class="btn btn-primary mt-2">Add Supplier</button>
         </form>
     </div>
+
     <button class="btn btn-secondary mt-3" onclick="window.location.href='admin.php'">Back to Admin</button>
 
 </body>
 
 </html>
-<script src="script.js"></script>
 
 <?php
 // Close connection

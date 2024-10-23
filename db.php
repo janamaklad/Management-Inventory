@@ -4,6 +4,7 @@ $username = "root";         // Default XAMPP MySQL user is 'root'
 $password = "";             // No password for 'root' by default in XAMPP
 $dbname = "project2";        // Ensure the database 'project' exists in your MySQL
 
+
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
