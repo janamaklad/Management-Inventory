@@ -4,7 +4,7 @@ session_start();
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "management-inventory1";
+$dbname = "newmanagment";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -89,7 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($stmt->execute()) {
                 session_unset(); // Clear session data
                 session_destroy(); // Destroy the session
-                header("location: ../user/user.html");
+                header("location: ../user/products.php");
                 exit();
             }
             $stmt->close();
