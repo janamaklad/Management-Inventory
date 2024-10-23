@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 22, 2024 at 11:59 PM
+-- Generation Time: Oct 23, 2024 at 11:45 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -41,7 +41,11 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `product_id`, `supplier_id`, `quantity`, `order_date`, `status`) VALUES
-(15, 1, 18, 8, '2024-10-22 20:52:02', '');
+(1, 1, 1, 5, '2024-10-01 00:00:00', 'completed'),
+(2, 2, 2, 3, '2024-10-05 00:00:00', 'completed'),
+(3, 7, 3, 10, '2024-10-10 00:00:00', 'completed'),
+(4, 11, 4, 7, '2024-10-15 00:00:00', 'pending'),
+(15, 1, 18, 8, '2024-10-22 20:52:02', 'pending');
 
 -- --------------------------------------------------------
 
@@ -87,6 +91,20 @@ INSERT INTO `products` (`ID`, `ProductName`, `Price`, `SellerName`, `Picture`, `
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `reports`
+--
+
+CREATE TABLE `reports` (
+  `id` int(11) NOT NULL,
+  `report_type` varchar(255) NOT NULL,
+  `report_date` date NOT NULL,
+  `details` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `suppliers`
 --
 
@@ -103,6 +121,10 @@ CREATE TABLE `suppliers` (
 --
 
 INSERT INTO `suppliers` (`id`, `supplier_name`, `contact_info`, `payment_terms`, `is_deleted`) VALUES
+(1, 'Supplier 1', 'contact1@example.com', 'Net 3', 0),
+(2, 'Supplier 2', 'contact2@example.com', 'Net 15', 0),
+(3, 'Supplier 3', 'contact3@example.com', 'Net 60', 0),
+(4, 'Supplier 4', 'contact4@example.com', 'Net 45', 0),
 (18, 'juhaina', '0', 'hfn', 1),
 (24, 'juhaina', '45', 'hfn', 1),
 (25, 'juhaina', '45', 'hfn', 0);
@@ -169,6 +191,12 @@ ALTER TABLE `products`
   ADD PRIMARY KEY (`ID`);
 
 --
+-- Indexes for table `reports`
+--
+ALTER TABLE `reports`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `suppliers`
 --
 ALTER TABLE `suppliers`
@@ -213,6 +241,12 @@ ALTER TABLE `pages`
 --
 ALTER TABLE `products`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT for table `reports`
+--
+ALTER TABLE `reports`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `suppliers`
