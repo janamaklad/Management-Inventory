@@ -1,6 +1,25 @@
 <?php
 include '../db.php';
 include 'AdminNavBar.php';
+include '../classes/Product.php'; // Assuming you have a Product class
+include '../classes/Order.php';   // Assuming you have an Order class
+
+try {
+    // Assuming you have a valid database connection stored in $conn
+    $productId = 1; // Replace with the actual product ID you need
+    $product = new Product($conn, $productId);
+
+    // Now you can get product details or reduce stock
+    echo "Product Name: " . $product->getName();
+    echo "Current Stock: " . $product->getStock();
+
+    // Reduce stock if an order is made
+    $orderQuantity = 5; // Example order quantity
+    $product->reduceStock($orderQuantity);
+
+} catch (Exception $e) {
+    echo "Error: " . $e->getMessage();
+}
 
 // Handle form submission for creating a new order
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['create_order'])) {
@@ -8,19 +27,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['create_order'])) {
     $supplier_id = $_POST['supplier_id'];
     $quantity = $_POST['quantity'];
 
-    $sql = "INSERT INTO orders (product_id, supplier_id, quantity) VALUES (?, ?, ?)";
-    $stmt = $conn->prepare($sql);
-
-    if ($stmt) {
-        $stmt->bind_param("iii", $product_id, $supplier_id, $quantity);
-        if ($stmt->execute()) {
-            echo "<div class='alert alert-success'>Order created successfully!</div>";
-        } else {
-            echo "<div class='alert alert-danger'>Error: " . $stmt->error . "</div>";
-        }
-        $stmt->close();
-    } else {
-        echo "Failed to prepare statement: " . $conn->error;
+    // Create an instance of the Order class
+    $order = new Order($conn);
+    
+    // Start a transaction
+    $conn->begin_transaction();
+    try {
+        // Create the order
+        $order->createOrder($product_id, $supplier_id, $quantity);
+        
+        // Create an instance of the Product class to update stock
+        $product = new Product($conn, $product_id); // Pass both parameters
+        $product->reduceStock($quantity); // Decrease stock
+        
+        // Commit the transaction
+        $conn->commit();
+        echo "<div class='alert alert-success'>Order created and stock updated successfully!</div>";
+    } catch (Exception $e) {
+        // Rollback if an error occurs
+        $conn->rollback();
+        echo "<div class='alert alert-danger'>Transaction failed: " . $e->getMessage() . "</div>";
     }
 }
 
@@ -30,58 +56,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_order'])) {
     $quantity = $_POST['quantity'];
     $status = $_POST['status'];
 
-    // Debugging output
-    echo "<pre>Order ID: " . $order_id . "\n";
-    echo "Quantity: " . $quantity . "\n";
-    echo "Status: " . $status . "\n</pre>";
-
     // Make sure the SQL query is correct and status is passed correctly
-    $sql = "UPDATE orders SET quantity = ?, status = ? WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-
-    if ($stmt) {
-        // Bind parameters: quantity (int), status (string), order_id (int)
-        $stmt->bind_param("isi", $quantity, $status, $order_id);
-
-        if ($stmt->execute()) {
-            echo "<div class='alert alert-success'>Order updated successfully!</div>";
-            // Redirect to avoid re-submission
-            header("Location: orders.php");
-            exit();
-        } else {
-            echo "<div class='alert alert-danger'>Error: " . $stmt->error . "</div>";
-        }
-        $stmt->close();
-    } else {
-        echo "Failed to prepare statement: " . $conn->error;
-    }
+    $order = new Order($conn);
+    $order->updateOrder($order_id, $quantity, $status);
 }
 
 // Handle order deletion
 if (isset($_GET['delete_order'])) {
     $order_id = $_GET['delete_order'];
-
-    $sql = "DELETE FROM orders WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-    if ($stmt) {
-        $stmt->bind_param("i", $order_id);
-        if ($stmt->execute()) {
-            echo "<div class='alert alert-success'>Order deleted successfully!</div>";
-        } else {
-            echo "<div class='alert alert-danger'>Error: " . $stmt->error . "</div>";
-        }
-        $stmt->close();
-    } else {
-        echo "Failed to prepare statement: " . $conn->error;
-    }
+    $order = new Order($conn);
+    $order->deleteOrder($order_id);
 }
 
 // Fetch orders to display in the table
-$sql = "SELECT o.id, p.ProductName AS ProductName, s.supplier_name AS supplier_name, o.quantity, o.order_date, o.status
-        FROM orders o
-        JOIN products p ON o.product_id = p.id
-        JOIN suppliers s ON o.supplier_id = s.id";
-$result = $conn->query($sql);
+$order = new Order($conn);
+$result = $order->fetchOrders();
 ?>
 
 <!DOCTYPE html>
@@ -173,7 +162,6 @@ $result = $conn->query($sql);
             </tbody>
         </table>
 
-               
         <h2 class="my-4">Create Order</h2>
         <form action="" method="POST">
             <div class="form-group">

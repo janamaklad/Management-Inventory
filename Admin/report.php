@@ -84,54 +84,62 @@ include 'AdminNavBar.php';
     </div>
 
     <script>
-    // Fetch the data from report_data.php
-    $.getJSON('report_data.php', function(data) {
-        // Sales Chart
-        var salesCtx = document.getElementById('salesChart').getContext('2d');
-        var salesChart = new Chart(salesCtx, {
-            type: 'bar',
-            data: {
-                labels: data.sales.labels,
-                datasets: [{
-                    label: 'Sales Revenue',
-                    data: data.sales.data,
-                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+// After fetching the stock data
+$.getJSON('report_data.php', function(data) {
+    // Sales Chart
+    var salesCtx = document.getElementById('salesChart').getContext('2d');
+    var salesChart = new Chart(salesCtx, {
+        type: 'bar',
+        data: {
+            labels: data.sales.labels,
+            datasets: [{
+                label: 'Sales Revenue',
+                data: data.sales.data,
+                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
                 }
             }
-        });
-
-        // Stock Chart
-        var stockCtx = document.getElementById('stockChart').getContext('2d');
-        var stockChart = new Chart(stockCtx, {
-            type: 'bar',
-            data: {
-                labels: data.stock.labels,
-                datasets: [{
-                    label: 'Stock Levels',
-                    data: data.stock.data,
-                    backgroundColor: 'rgba(255, 206, 86, 0.6)',
-                    borderColor: 'rgba(255, 206, 86, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
+        }
     });
+
+    // Stock Chart
+    var stockCtx = document.getElementById('stockChart').getContext('2d');
+    var stockChart = new Chart(stockCtx, {
+        type: 'bar',
+        data: {
+            labels: data.stock.labels,
+            datasets: [{
+                label: 'Stock Levels',
+                data: data.stock.data,
+                backgroundColor: 'rgba(255, 206, 86, 0.6)',
+                borderColor: 'rgba(255, 206, 86, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Check for low stock levels
+    data.stock.data.forEach((quantity, index) => {
+        if (quantity <= 10) {
+            alert("Warning: Low stock for " + data.stock.labels[index] + "! Only " + quantity + " left.");
+        }
+    });
+});
+
     </script>
 
 </body>
