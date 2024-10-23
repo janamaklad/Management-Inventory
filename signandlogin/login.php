@@ -1,15 +1,5 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "project";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
+include '../db.php';
 $email = $password = "";
 
 
@@ -61,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $_SESSION["name"] = $name;
 
                             // Redirect user to welcome page
-                            header("location: ../user/user.html");
+                            header("location: ../Homepage.php");
                         } else {
                             $password_err = "The password you entered was not valid.";
                         }

@@ -1,131 +1,132 @@
 <?php
 include '../db.php';
 include 'AdminNavBar.php';
-// Handle Create/Update Supplier
+
 // Handle Create/Update Supplier
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $supplier_name = $_POST['supplier_name'];
+    $supplier_name = $_POST['supplier_name']; 
     $contact_info = $_POST['contact_info'];
     $payment_terms = $_POST['payment_terms'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    // Server-side Email Validation
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo "<script>alert('Invalid email format'); window.location.href = 'suppliers.php';</script>";
+        exit();
+    }
+
+    // Server-side Password Validation
+    if (!empty($password) && strlen($password) < 8) {
+        echo "<script>alert('Password must be at least 8 characters long'); window.location.href = 'suppliers.php';</script>";
+        exit();
+    }
+
+    // Hash the password only if it's provided
+    if (!empty($password)) {
+        $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+    } else {
+        $hashed_password = null;
+    }
 
     // Check if it's an update operation
     if (isset($_POST['supplier_id']) && !empty($_POST['supplier_id'])) {
         $supplier_id = $_POST['supplier_id'];
-        $stmt = $conn->prepare("UPDATE suppliers SET supplier_name=?, contact_info=?, payment_terms=? WHERE id=?");
-        $stmt->bind_param("sssi", $supplier_name, $contact_info, $payment_terms, $supplier_id);
-    } else {
-        // Create new supplier
-        $stmt = $conn->prepare("INSERT INTO suppliers (supplier_name, contact_info, payment_terms) VALUES (?, ?, ?)");
-        $stmt->bind_param("sss", $supplier_name, $contact_info, $payment_terms);
-    }
 
-    if ($stmt->execute()) {
-        if (empty($_POST['supplier_id'])) {
-            // If a new supplier is added, redirect with a 'new' status
-            $new_supplier_id = $conn->insert_id; // Gets the last inserted ID
-            header("Location: suppliers.php?status=created");
+        // Update user details in the users table (update both Name and Email)
+        if ($hashed_password) {
+            $stmt_user = $conn->prepare("UPDATE users SET Name=?, Email=?, Password=? WHERE id=(SELECT user_id FROM suppliers WHERE id=?)");
+            $stmt_user->bind_param("sssi", $supplier_name, $email, $hashed_password, $supplier_id);
         } else {
-            // Redirect with a success status when updated
-            header("Location: suppliers.php?status=updated");
+            $stmt_user = $conn->prepare("UPDATE users SET Name=?, Email=? WHERE id=(SELECT user_id FROM suppliers WHERE id=?)");
+            $stmt_user->bind_param("ssi", $supplier_name, $email, $supplier_id);
         }
-        exit(); // Ensure the script stops after redirection
+        $stmt_user->execute();
+        $stmt_user->close();
+
+        // Update supplier details in the suppliers table
+        $stmt_supplier = $conn->prepare("UPDATE suppliers SET supplier_name=?, contact_info=?, payment_terms=? WHERE id=?");
+        $stmt_supplier->bind_param("sssi", $supplier_name, $contact_info, $payment_terms, $supplier_id);
+        $stmt_supplier->execute();
+        $stmt_supplier->close();
+        
+        header("Location: suppliers.php?status=updated");
+        exit(); 
     } else {
-        echo "Error: " . $stmt->error;
+        // Create new user (insert into the users table)
+        $stmt_user = $conn->prepare("INSERT INTO users (Name, Email, Password, Usertypeid) VALUES (?, ?, ?, ?)");
+        $usertype_id = 2; // Assuming '2' represents supplier
+        $stmt_user->bind_param("sssi", $supplier_name, $email, $hashed_password, $usertype_id);
+        $stmt_user->execute();
+
+        // Get the last inserted user ID to associate it with the supplier
+        $new_user_id = $conn->insert_id;
+
+        // Create new supplier and associate with the new user (insert into the suppliers table)
+        $stmt_supplier = $conn->prepare("INSERT INTO suppliers (user_id, supplier_name, contact_info, payment_terms) VALUES (?, ?, ?, ?)");
+        $stmt_supplier->bind_param("isss", $new_user_id, $supplier_name, $contact_info, $payment_terms);
+        $stmt_supplier->execute();
+        $stmt_supplier->close();
+        
+        header("Location: suppliers.php?status=created");
+        exit(); 
     }
-    $stmt->close();
 }
 
-
-// Handle Delete Supplier (Soft Delete)
+// Handle Delete Supplier (Permanent Delete)
 if (isset($_GET['delete'])) {
-    $supplier_id = $_GET['delete'];
+  $supplier_id = $_GET['delete'];
 
-    // Soft Delete by updating `is_deleted` field
-    $stmt = $conn->prepare("UPDATE suppliers SET is_deleted = 1 WHERE id=?");
-    $stmt->bind_param("i", $supplier_id);
+  // Fetch the user_id associated with the supplier before deletion
+  $stmt = $conn->prepare("SELECT user_id FROM suppliers WHERE id=?");
+  $stmt->bind_param("i", $supplier_id);
+  $stmt->execute();
+  $result = $stmt->get_result();
 
-    if ($stmt->execute()) {
-        // Redirect with a delete status after successful deletion
-        header("Location: suppliers.php?status=deleted");
-        exit(); // Ensure the script stops after redirection
-    } else {
-        echo "Error updating supplier: " . $stmt->error;
-    }
-    $stmt->close();
+  if ($result->num_rows > 0) {
+      $row = $result->fetch_assoc();
+      $user_id = $row['user_id'];
+
+      // Now delete the supplier
+      $stmt_supplier = $conn->prepare("DELETE FROM suppliers WHERE id=?");
+      $stmt_supplier->bind_param("i", $supplier_id);
+      $stmt_supplier->execute();
+      $stmt_supplier->close();
+
+      // Then delete the user
+      $stmt_user = $conn->prepare("DELETE FROM users WHERE id=?");
+      $stmt_user->bind_param("i", $user_id);
+      $stmt_user->execute();
+      $stmt_user->close();
+
+      // Redirect with a delete status after successful deletion
+      header("Location: suppliers.php?status=deleted");
+      exit();
+  } else {
+      echo "Supplier not found.";
+  }
+  $stmt->close();
 }
+
 
 // Fetch all suppliers (excluding deleted ones)
 $sql = "SELECT * FROM suppliers WHERE is_deleted = 0";
 $result = $conn->query($sql);
-
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Suppliers Management</title>
     <link rel="stylesheet" href="Admin.css"> 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
-
 <body>
     <div class="container mt-5">
         <h2>Suppliers Management</h2>
-        <!-- Bootstrap Alert Modal -->
-<div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="statusModalLabel">Status</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div id="statusMessage" class="alert alert-success" role="alert">
-          <!-- Status message will go here -->
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Edit Supplier Modal -->
-<div class="modal fade" id="editSupplierModal" tabindex="-1" aria-labelledby="editSupplierModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="editSupplierModalLabel">Update Supplier</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form id="editSupplierForm" method="post" action="suppliers.php">
-          <input type="hidden" name="supplier_id" id="supplier_id">
-          <div class="mb-3">
-            <label for="supplier_name" class="form-label">Supplier Name</label>
-            <input type="text" class="form-control" id="supplier_name" name="supplier_name" required>
-          </div>
-          <div class="mb-3">
-            <label for="contact_info" class="form-label">Contact Info</label>
-            <input type="text" class="form-control" id="contact_info" name="contact_info" required>
-          </div>
-          <div class="mb-3">
-            <label for="payment_terms" class="form-label">Payment Terms</label>
-            <input type="text" class="form-control" id="payment_terms" name="payment_terms" required>
-          </div>
-          <button type="submit" class="btn btn-primary">Update Supplier</button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
 
         <!-- Suppliers Table -->
         <h3>Supplier List</h3>
@@ -146,22 +147,20 @@ $result = $conn->query($sql);
                             <td><?php echo $row['contact_info']; ?></td>
                             <td><?php echo $row['payment_terms']; ?></td>
                             <td>
- <!-- Updated Edit Button -->
- <a href="#" class="btn btn-primary btn-sm editBtn" 
-                           data-bs-toggle="modal" 
-                           data-bs-target="#editSupplierModal"
-                           data-id="<?php echo $row['id']; ?>"
-                           data-name="<?php echo $row['supplier_name']; ?>"
-                           data-contact="<?php echo $row['contact_info']; ?>"
-                           data-terms="<?php echo $row['payment_terms']; ?>">
-                           Edit
-                        </a>      
-                        
-                    <!-- Delete Button with Confirmation -->
-                     <!-- Delete Button with Confirmation -->
-<a href="suppliers.php?delete=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" 
-    onclick="return confirm('Are you sure you want to delete this supplier?')">Delete</a>
-
+                                <!-- Edit Button -->
+                                <a href="#" class="btn btn-primary btn-sm editBtn" 
+                                   data-bs-toggle="modal" 
+                                   data-bs-target="#editSupplierModal"
+                                   data-id="<?php echo $row['id']; ?>"
+                                   data-name="<?php echo $row['supplier_name']; ?>"
+                                   data-contact="<?php echo $row['contact_info']; ?>"
+                                   data-terms="<?php echo $row['payment_terms']; ?>">
+                                   Edit
+                                </a>      
+                                
+                                <!-- Delete Button -->
+                                <a href="suppliers.php?delete=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" 
+                                   onclick="return confirm('Are you sure you want to delete this supplier?')">Delete</a>
                             </td>
                         </tr>
                     <?php endwhile; ?>
@@ -173,34 +172,101 @@ $result = $conn->query($sql);
             </tbody>
         </table>
 
-        <!-- Add/Edit Supplier Form -->
-        <h3><?php echo isset($_GET['edit']) ? 'Edit Supplier' : 'Add New Supplier'; ?></h3>
-        <?php
-        // If editing, fetch the existing supplier data
-        if (isset($_GET['edit'])) {
-            $supplier_id = $_GET['edit'];
-            $stmt = $conn->prepare("SELECT * FROM suppliers WHERE id=?");
-            $stmt->bind_param("i", $supplier_id);
-            $stmt->execute();
-            $edit_result = $stmt->get_result();
-            $supplier = $edit_result->fetch_assoc();
-            $stmt->close();
-        }
-        ?>
-        <form method="post" action="suppliers.php">
-            <input type="hidden" name="supplier_id" value="<?php echo isset($supplier['id']) ? $supplier['id'] : ''; ?>">
-            <input type="text" class="form-control" name="supplier_name" placeholder="Supplier Name" value="<?php echo isset($supplier['supplier_name']) ? $supplier['supplier_name'] : ''; ?>" required>
-            <input type="text" class="form-control" name="contact_info" placeholder="Contact Info" value="<?php echo isset($supplier['contact_info']) ? $supplier['contact_info'] : ''; ?>" required>
-            <input type="text" class="form-control" name="payment_terms" placeholder="Payment Terms" value="<?php echo isset($supplier['payment_terms']) ? $supplier['payment_terms'] : ''; ?>" required>
-            <button type="submit" class="btn btn-primary mt-2"><?php echo isset($_GET['edit']) ? 'Update Supplier' : 'Add Supplier'; ?></button>
-        </form>
+<!-- Add Supplier Button -->
+<button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#editSupplierModal" onclick="prepareAddSupplier()">
+    Add New Supplier
+</button>
+
+<!-- Edit/Add Supplier Modal -->
+<div class="modal fade" id="editSupplierModal" tabindex="-1" aria-labelledby="editSupplierModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editSupplierModalLabel">Add Supplier</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Add/Edit Supplier Form -->
+                <form method="post" action="suppliers.php" onsubmit="return validateForm()">
+                    <input type="hidden" id="supplier_id" name="supplier_id"> <!-- Hidden field for supplier ID -->
+                    
+                    <input type="text" class="form-control mb-2" id="supplier_name" name="supplier_name" placeholder="Name" required>
+                    <input type="email" class="form-control mb-2" id="email" name="email" placeholder="Email" required>
+                    <input type="password" class="form-control mb-2" id="password" name="password" placeholder="Password" minlength="8"> <!-- Password can be optional for updates -->
+                    <input type="text" class="form-control mb-2" id="contact_info" name="contact_info" placeholder="Contact Info" required>
+                    <input type="text" class="form-control mb-2" id="payment_terms" name="payment_terms" placeholder="Payment Terms" required>
+                    <button type="submit" class="btn btn-primary mt-2">Save Changes</button>
+                </form>
+            </div>
+        </div>
     </div>
-    <button class="btn btn-secondary mt-3" onclick="window.location.href='admin.php'">Back to Admin</button>
+</div>
+
+<script>
+function validateForm() {
+    var email = document.getElementById('email').value;
+    var password = document.getElementById('password').value;
+    var emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/; // Basic email format validation
+    
+    if (!email.match(emailPattern)) {
+        alert("Please enter a valid email address");
+        return false;
+    }
+
+    if (password && password.length < 8) {
+        alert("Password must be at least 8 characters long");
+        return false;
+    }
+
+    return true;
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Add event listeners for the Edit buttons
+    var editButtons = document.querySelectorAll('.editBtn');
+    editButtons.forEach(function (button) {
+        button.addEventListener('click', function () {
+            // Get the supplier details from data attributes
+            var supplierId = this.getAttribute('data-id');
+            var supplierName = this.getAttribute('data-name');
+            var contactInfo = this.getAttribute('data-contact');
+            var paymentTerms = this.getAttribute('data-terms');
+
+            // Set the form values
+            document.getElementById('supplier_id').value = supplierId;
+            document.getElementById('supplier_name').value = supplierName;
+            document.getElementById('contact_info').value = contactInfo;
+            document.getElementById('payment_terms').value = paymentTerms;
+
+            // Set modal title for editing
+            document.getElementById('editSupplierModalLabel').textContent = "Edit Supplier";
+
+            // Password can be optional in case of updates
+            document.getElementById('password').removeAttribute('required');
+        });
+    });
+});
+
+// Prepare modal for adding new supplier
+function prepareAddSupplier() {
+    // Clear form fields
+    document.getElementById('supplier_id').value = "";
+    document.getElementById('supplier_name').value = "";
+    document.getElementById('email').value = "";
+    document.getElementById('password').value = "";
+    document.getElementById('contact_info').value = "";
+    document.getElementById('payment_terms').value = "";
+
+    // Set modal title for adding
+    document.getElementById('editSupplierModalLabel').textContent = "Add Supplier";
+    
+    // Ensure password field is required
+    document.getElementById('password').setAttribute('required', 'required');
+}
+</script>
 
 </body>
-
 </html>
-<script src="script.js"></script>
 
 <?php
 // Close connection
