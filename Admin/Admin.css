@@ -69,10 +69,12 @@ body {
 .btn-primary {
     background-color: #007bff;
     border: none;
+    margin: 4px; /* Adjust margin */
 }
 
 .btn-primary:hover {
     background-color: #0056b3;
+    margin: 10px; 
 }
 
 .btn-danger {
@@ -82,6 +84,16 @@ body {
 
 .btn-danger:hover {
     background-color: #bd2130;
+}
+
+.btn-add {
+    background-color: green;
+    border: none;
+    margin: 4px; 
+}
+
+.btn-add:hover {
+    background-color: darkgreen; 
 }
 
 .form-control {
