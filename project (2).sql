@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 23, 2024 at 11:45 AM
+-- Generation Time: Oct 23, 2024 at 07:29 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `project`
+-- Database: `project2`
 --
 
 -- --------------------------------------------------------
@@ -121,7 +121,7 @@ CREATE TABLE `suppliers` (
 --
 
 INSERT INTO `suppliers` (`id`, `supplier_name`, `contact_info`, `payment_terms`, `is_deleted`) VALUES
-(1, 'Supplier 1', 'contact1@example.com', 'Net 3', 0),
+(1, 'Supplier 1', 'contact1@example.com', 'Net 4', 0),
 (2, 'Supplier 2', 'contact2@example.com', 'Net 15', 0),
 (3, 'Supplier 3', 'contact3@example.com', 'Net 60', 0),
 (4, 'Supplier 4', 'contact4@example.com', 'Net 45', 0),
@@ -140,8 +140,17 @@ CREATE TABLE `users` (
   `Name` text NOT NULL,
   `Email` text NOT NULL,
   `Password` text NOT NULL,
-  `Usertype-id` int(11) NOT NULL
+  `Usertypeid` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`ID`, `Name`, `Email`, `Password`, `Usertypeid`) VALUES
+(1, 'Bahig', 'bahigmahmoud@gamil.com', '$2y$10$aDTTEDzJO.xYT3IB/30iD.EwN6QKCbLekhBxVta21yeHj2SqUghn2', 0),
+(3, 'ahmed', 'ahmed@gmail.com', '$2y$10$rho/mS8dLu1fRZ9mcuc39.rCD9h/4ucUqklnd5LFh7VQ90pyxBZ/y', 1),
+(4, 'omar', 'omar@gmail.com', '$2y$10$68HIQ36YuO7F/oLpWz1e5OaV9CEiprmfhEqsyi6JgySZFkOU76.Ze', 0);
 
 -- --------------------------------------------------------
 
@@ -153,6 +162,15 @@ CREATE TABLE `usertypes` (
   `ID` int(11) NOT NULL,
   `Name` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `usertypes`
+--
+
+INSERT INTO `usertypes` (`ID`, `Name`) VALUES
+(0, 'Customer'),
+(1, 'Admin'),
+(2, 'Supplier');
 
 -- --------------------------------------------------------
 
@@ -206,7 +224,8 @@ ALTER TABLE `suppliers`
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`ID`);
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `Usertype-id` (`Usertypeid`);
 
 --
 -- Indexes for table `usertypes`
@@ -258,7 +277,7 @@ ALTER TABLE `suppliers`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `usertypes-pages`
@@ -276,6 +295,12 @@ ALTER TABLE `usertypes-pages`
 ALTER TABLE `orders`
   ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`ID`),
   ADD CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`supplier_id`) REFERENCES `suppliers` (`id`);
+
+--
+-- Constraints for table `users`
+--
+ALTER TABLE `users`
+  ADD CONSTRAINT `Usertype-id` FOREIGN KEY (`Usertypeid`) REFERENCES `usertypes` (`ID`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

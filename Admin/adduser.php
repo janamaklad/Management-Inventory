@@ -1,6 +1,8 @@
 <?php
 
-include '../db.php';
+include '../db.php'; 
+include 'AdminNavBar.php';
+
 // Function to check password strength
 function validatePassword($password) {
     return preg_match("/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{6,}$/", $password);
@@ -16,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'];
     $email = $_POST['email'];
     $password = $_POST['password'];
+    $role = $_POST['role']; // Capture the selected role
 
     // Validate password strength
     if (!validatePassword($password)) {
@@ -33,11 +36,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             // Hash the password before saving
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+            
+            // Set UserType-id based on the selected role
+            $usertypeid = ($role === 'admin') ? 1 : 0;
 
-            // Insert the new user
-            $sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
+            // Insert the new user with UserType-id
+            $sql = "INSERT INTO users (name, email, password, usertypeid) VALUES (?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sss", $username, $email, $hashed_password);
+            $stmt->bind_param("sssi", $username, $email, $hashed_password, $usertypeid); // Change to include usertype_id
             
             if ($stmt->execute()) {
                 // Redirect to the user management page after adding the user
@@ -66,7 +72,7 @@ $result = $conn->query($sql);
 <body>
     <div class="container">
         <h2>Add New User</h2>
-        <form method="post" >
+        <form method="post">
             <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
                 <input type="text" class="form-control" name="username" value="<?php echo isset($username) ? htmlspecialchars($username) : ''; ?>" required>
@@ -88,6 +94,11 @@ $result = $conn->query($sql);
                     <div class="text-danger"><?php echo $password_error; ?></div>
                 <?php endif; ?>
             </div>
+            <select class="form-control" name="role" required>
+                <option value="">Select Role</option>
+                <option value="admin">Admin</option>
+                <option value="user">User</option>
+            </select>
             <button type="submit" class="btn btn-primary">Add User</button>
             <?php if ($error_message): ?>
                 <div class="text-danger"><?php echo $error_message; ?></div>

@@ -1,4 +1,5 @@
 <?php
+include 'AdminNavBar.php'; 
 session_start();
 include '../db.php';
 
