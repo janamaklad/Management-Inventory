@@ -13,7 +13,7 @@ include('../db.php');
     <link rel="stylesheet" href="products.css">
 </head>
 <body>
-<header class="text-white text-center py-3">
+    <header class="text-white text-center py-3">
         <?php include('../navbar.php'); ?> <!-- Include the navbar -->
     </header>
 
@@ -29,9 +29,9 @@ include('../db.php');
                     <option value="category">Filter by category</option>
                     <option value="sweets">Sweets</option>
                     <option value="coffee and tea">Coffee and Tea</option>
-                    <option value="Groceries">Groceries</option>
-                    <option value="Bakery">Bakery</option>
-                    <option value="Drinks">Drinks</option>
+                    <option value="groceries">Groceries</option>
+                    <option value="bakery">Bakery</option>
+                    <option value="drinks">Drinks</option>
                 </select>
             </div>
         </div>
@@ -52,9 +52,9 @@ include('../db.php');
                     echo '      <img src="' . $row["image_url"] . '" class="card-img-top" alt="Product Image">';
                     echo '      <div class="card-body">';
                     echo '          <h5 class="card-title">' . $row["ProductName"] . '</h5>';
-                    echo '          <p class="card-text">Price: $' . $row["Price"] . '</p>';
+                    echo '          <p class="card-text">Price: $' . $row["Price"] . '</p>'; // Display price
                     echo '          <p class="card-text">Seller: ' . $row["SellerName"] . '</p>';
-                    echo '          <p class="card-text">Quantity: ' . $row["Quantity"] . '</p>';
+                    echo '          <p class="card-text">Available Quantity: ' . $row["Quantity"] . '</p>'; // Show available quantity
                     echo '          <button class="btn btn-success" onclick="addToCart(\'' . $row["ProductName"] . '\')">Add to Cart</button>'; // Updated to green button
                     echo '      </div>';
                     echo '  </div>';
