@@ -41,4 +41,6 @@ class Product {
         }
     }
 }
+
+// Make sure this closing bracket is present
 ?>

@@ -33,7 +33,7 @@ CREATE TABLE `orders` (
   `supplier_id` int(11) NOT NULL,
   `quantity` int(11) NOT NULL,
   `order_date` datetime DEFAULT current_timestamp(),
-  `status` enum('pending','completed','canceled') DEFAULT 'pending'
+  `status` enum('pending','completed','shipped') DEFAULT 'pending'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --

@@ -15,11 +15,13 @@ class Order {
                 throw new Exception("Not enough stock available.");
             }
 
+            // Insert order
             $sql = "INSERT INTO orders (product_id, supplier_id, quantity, order_date, status) VALUES (?, ?, ?, NOW(), 'Pending')";
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param("iii", $product_id, $supplier_id, $quantity);
             $stmt->execute();
 
+            // Reduce stock after order creation
             $product->reduceStock($quantity);
 
             $this->conn->commit();
