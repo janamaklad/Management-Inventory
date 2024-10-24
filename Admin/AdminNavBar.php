@@ -20,7 +20,7 @@
                     <a class="nav-link" href="Admin/report.php">Reports</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Logout</a>
+                    <a class="nav-link" href="logout.php">Logout</a>
                 </li>
             </ul>
         </div>

@@ -6,7 +6,7 @@ include '../db.php';
 // Fetch user data based on user ID
 if (isset($_GET['id'])) {
     $user_id = $_GET['id'];
-    $sql = "SELECT id, name, email, usertypeid FROM users WHERE id = ?";
+    $sql = "SELECT id, name, email, usertype_id FROM users WHERE id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $user_id);
     $stmt->execute();
@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param("sssii", $name, $email, $hashed_password, $usertypeid, $user_id);
     } else {
         // If no new password is provided, do not update the password field
-        $sql = "UPDATE users SET name = ?, email = ?, usertypeid = ? WHERE id = ?";
+        $sql = "UPDATE users SET name = ?, email = ?, usertype_id = ? WHERE id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("ssii", $name, $email, $usertypeid, $user_id);
     }
@@ -75,8 +75,8 @@ $conn->close();
             <!-- Role Selection Label and Dropdown -->
             <label for="role" class="form-label">Role</label>
             <select class="form-control" name="role" required>
-                <option value="admin" <?php echo $user['usertypeid'] == 1 ? 'selected' : ''; ?>>Admin</option>
-                <option value="user" <?php echo $user['usertypeid'] == 0 ? 'selected' : ''; ?>>User</option>
+                <option value="admin" <?php echo $user['usertype_id'] == 1 ? 'selected' : ''; ?>>Admin</option>
+                <option value="user" <?php echo $user['usertype_id'] == 0 ? 'selected' : ''; ?>>User</option>
             </select>
 
             <button type="submit" class="btn btn-primary">Update User</button>

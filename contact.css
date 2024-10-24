@@ -1,0 +1,92 @@
+/* General body styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+}
+
+/* Container for form */
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 10px; /* Increased radius for a softer look */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Deeper shadow for better separation */
+    transition: transform 0.3s ease; /* Subtle hover effect */
+}
+
+/* Scale effect on hover */
+.container:hover {
+    transform: translateY(-2px); /* Slight lift effect */
+}
+
+/* Header styles */
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px; /* Space below the header */
+}
+
+/* Form group styles */
+.form-group {
+    margin-bottom: 30px; /* Increased margin for better spacing */
+}
+
+/* Label styles */
+label {
+    display: block;
+    margin-bottom: 8px; /* Space below label */
+    font-weight: bold; /* Make labels bolder */
+    color: #555; /* Darker color for better readability */
+}
+
+/* Input and textarea styles */
+input[type="text"],
+input[type="email"],
+textarea {
+    width: 95%;
+    padding: 12px; /* Increased padding for better touch targets */
+    border: 1px solid #ccc;
+    border-radius: 6px; /* Softer corners */
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05); /* Inner shadow for depth */
+    transition: border-color 0.3s ease; /* Smooth border color change */
+}
+
+/* Input focus styles */
+input:focus,
+textarea:focus {
+    border-color: #5cb85c; /* Highlight border color on focus */
+    outline: none; /* Remove default outline */
+}
+
+/* Button styles */
+button {
+    background-color: #070807;
+    color: white;
+    padding: 12px 20px; /* Increased padding */
+    border: none;
+    border-radius: 6px; /* Softer corners */
+    cursor: pointer;
+    font-size: 1rem; /* Make the button text slightly larger */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
+}
+
+/* Button hover effect */
+button:hover {
+    background-color: #115211; /* Darker green on hover */
+    transform: translateY(-2px); /* Lift effect on hover */
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .container {
+        margin: 20px; /* Reduce margin on smaller screens */
+        padding: 15px; /* Adjust padding */
+    }
+
+    button {
+        width: 100%; /* Full-width button on small screens */
+    }
+}
