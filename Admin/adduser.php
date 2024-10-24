@@ -1,5 +1,4 @@
 <?php
-
 include '../db.php'; 
 include 'AdminNavBar.php';
 
@@ -41,20 +40,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $usertypeid = ($role === 'admin') ? 1 : 0;
 
             // Insert the new user with UserType-id
-            $sql = "INSERT INTO users (name, email, password, usertypeid) VALUES (?, ?, ?, ?)";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sssi", $username, $email, $hashed_password, $usertypeid); // Change to include usertype_id
-            
-            if ($stmt->execute()) {
-                // Redirect to the user management page after adding the user
-                header("Location: ../Admin/Admin.php");
-                exit();
-            } else {
-                $error_message = "Error adding user!";
+          // Insert the new user with UserType-id
+$sql = "INSERT INTO users (name, email, password, usertype_id) VALUES (?, ?, ?, ?)";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("sssi", $username, $email, $hashed_password, $usertypeid); // Corrected to usertype_id
+
+if ($stmt->execute()) {
+    // Redirect to the user management page after adding the user
+    header("Location: ../Admin/Admin.php");
+    exit();
+} else {
+    $error_message = "Error adding user!";
+}
             }
         }
     }
-}
+
 
 // Fetch all users from the database
 $sql = "SELECT id, name, email FROM users"; // You don't need to fetch passwords here
