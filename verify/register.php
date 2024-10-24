@@ -3,6 +3,7 @@ session_start();
 
 include '../db.php';
 
+
 $name = $email = $password = $confirm_password = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $has_error = false; // Flag for error checking
