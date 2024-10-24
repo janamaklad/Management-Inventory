@@ -1,6 +1,7 @@
 <?php
+include '../db.php'; 
+include 'AdminNavBar.php';
 
-include '../db.php';
 // Function to check password strength
 function validatePassword($password) {
     return preg_match("/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{6,}$/", $password);
@@ -16,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'];
     $email = $_POST['email'];
     $password = $_POST['password'];
+    $role = $_POST['role']; // Capture the selected role
 
     // Validate password strength
     if (!validatePassword($password)) {
@@ -33,22 +35,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             // Hash the password before saving
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-
-            // Insert the new user
-            $sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sss", $username, $email, $hashed_password);
             
-            if ($stmt->execute()) {
-                // Redirect to the user management page after adding the user
-                header("Location: ../Admin/Admin.php");
-                exit();
-            } else {
-                $error_message = "Error adding user!";
+            // Set UserType-id based on the selected role
+            $usertypeid = ($role === 'admin') ? 1 : 0;
+
+            // Insert the new user with UserType-id
+          // Insert the new user with UserType-id
+$sql = "INSERT INTO users (name, email, password, usertype_id) VALUES (?, ?, ?, ?)";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("sssi", $username, $email, $hashed_password, $usertypeid); // Corrected to usertype_id
+
+if ($stmt->execute()) {
+    // Redirect to the user management page after adding the user
+    header("Location: ../Admin/Admin.php");
+    exit();
+} else {
+    $error_message = "Error adding user!";
+}
             }
         }
     }
-}
+
 
 // Fetch all users from the database
 $sql = "SELECT id, name, email FROM users"; // You don't need to fetch passwords here
@@ -65,8 +72,8 @@ $result = $conn->query($sql);
 </head>
 <body>
     <div class="container">
-        <h2>Add New User</h2>
-        <form method="post" >
+        <h2>Add New User or Admin</h2>
+        <form method="post">
             <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
                 <input type="text" class="form-control" name="username" value="<?php echo isset($username) ? htmlspecialchars($username) : ''; ?>" required>
@@ -88,6 +95,11 @@ $result = $conn->query($sql);
                     <div class="text-danger"><?php echo $password_error; ?></div>
                 <?php endif; ?>
             </div>
+            <select class="form-control" name="role" required>
+                <option value="">Select Role</option>
+                <option value="Admin">Admin</option>
+                <option value="user">User</option>
+            </select>
             <button type="submit" class="btn btn-primary">Add User</button>
             <?php if ($error_message): ?>
                 <div class="text-danger"><?php echo $error_message; ?></div>
