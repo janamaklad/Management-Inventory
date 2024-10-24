@@ -3,7 +3,7 @@
 $servername = "localhost"; 
 $username = "root";
 $password = ""; 
-$dbname = "project2"; 
+$dbname = "project"; 
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -15,7 +15,7 @@ if ($conn->connect_error) {
 
 // Fetch all users from the database
 
-$sql = "SELECT id, name, email, password, usertypeid FROM users WHERE usertypeid != 2";
+$sql = "SELECT id, name, email, password, usertype_id FROM users WHERE usertype_id != 2";
 
 $result = $conn->query($sql);
 
