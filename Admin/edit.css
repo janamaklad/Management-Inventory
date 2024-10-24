@@ -1,12 +1,31 @@
-
 .container {
-    margin-top: 20px; 
+    margin-top: 40px;
+    max-width: 600px;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-label {
+    margin-bottom: 10px;
+    font-weight: bold;
 }
 
 .form-control {
-    margin-bottom: 15px; 
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+select.form-control {
+    margin-bottom: 30px;
 }
 
 .btn {
-    margin-top: 10px; 
+    margin-top: 20px;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
 }

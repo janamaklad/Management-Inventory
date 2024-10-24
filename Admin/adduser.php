@@ -71,7 +71,7 @@ $result = $conn->query($sql);
 </head>
 <body>
     <div class="container">
-        <h2>Add New User</h2>
+        <h2>Add New User or Admin</h2>
         <form method="post">
             <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
@@ -96,7 +96,7 @@ $result = $conn->query($sql);
             </div>
             <select class="form-control" name="role" required>
                 <option value="">Select Role</option>
-                <option value="admin">Admin</option>
+                <option value="Admin">Admin</option>
                 <option value="user">User</option>
             </select>
             <button type="submit" class="btn btn-primary">Add User</button>

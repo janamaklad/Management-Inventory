@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit(); 
     } else {
         // Create new user
-        $stmt_user = $conn->prepare("INSERT INTO users (Name, Email, Password, `Usertype-id`) VALUES (?, ?, ?, ?)");
+        $stmt_user = $conn->prepare("INSERT INTO users (Name, Email, Password, `Usertypeid`) VALUES (?, ?, ?, ?)");
         $usertype_id = 2; // Assuming '2' represents supplier
         $stmt_user->bind_param("sssi", $name, $email, $password, $usertype_id);
         $stmt_user->execute();
@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $new_user_id = $conn->insert_id;
 
         // Create new supplier and associate with user
-        $stmt_supplier = $conn->prepare("INSERT INTO suppliers (user_id, supplier_name, contact_info, payment_terms) VALUES (?, ?, ?, ?)");
+        $stmt_supplier = $conn->prepare("INSERT INTO suppliers (id, supplier_name, contact_info, payment_terms) VALUES (?, ?, ?, ?)");
         $stmt_supplier->bind_param("isss", $new_user_id, $supplier_name, $contact_info, $payment_terms);
         $stmt_supplier->execute();
         $stmt_supplier->close();

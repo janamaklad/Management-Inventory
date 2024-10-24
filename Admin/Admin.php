@@ -14,7 +14,9 @@ if ($conn->connect_error) {
 }
 
 // Fetch all users from the database
-$sql = "SELECT id, name, email, password FROM users";
+
+$sql = "SELECT id, name, email, password, usertypeid FROM users WHERE usertypeid != 2";
+
 $result = $conn->query($sql);
 
 ?>
@@ -127,36 +129,39 @@ $result = $conn->query($sql);
         <tr>
             <th>Username</th>
             <th>Email</th>
-            <th>Password</th>
+            <th>Role</th>
             <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-        <?php
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                echo "<tr>";
-                echo "<td>" . htmlspecialchars($row["name"]) . "</td>";
-                echo "<td>" . htmlspecialchars($row["email"]) . "</td>";
-                echo "<td>" . htmlspecialchars($row["password"]) . "</td>";
-                echo "<td>";
-                
-                // Edit button
-                echo "<a href='edituser.php?id=" . $row['id'] . "' class='btn btn-primary btn-sm mx-2'>Edit</a>";
-
-                // Delete button
-                echo "<form method='post' action='deleteuser.php' style='display:inline-block'>"; 
-                echo "<input type='hidden' name='user_id' value='" . $row['id'] . "'>";
-                echo "<button type='submit' class='btn btn-danger btn-sm mx-2'>Delete</button>";
-                echo "</form>";
-
-                echo "</td>";
-                echo "</tr>";
+    <?php
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            // Filter out users with usertypeid = 2 (if necessary)
+            if ($row['usertypeid'] == 2) {
+                continue;
             }
-        } else {
-            echo "<tr><td colspan='4'>No users found.</td></tr>";
+
+            echo "<tr>";
+            echo "<td>" . htmlspecialchars($row["name"]) . "</td>";
+            echo "<td>" . htmlspecialchars($row["email"]) . "</td>";
+            echo "<td>" . ($row["usertypeid"] == 1 ? "Admin" : "User") . "</td>";
+            echo "<td>";
+            
+            // Edit and Delete buttons
+            echo "<a href='edituser.php?id=" . $row['id'] . "' class='btn btn-primary btn-sm mx-2'>Edit</a>";
+            echo "<form method='post' action='deleteuser.php' style='display:inline-block'>"; 
+            echo "<input type='hidden' name='user_id' value='" . $row['id'] . "'>";
+            echo "<button type='submit' class='btn btn-danger btn-sm mx-2'>Delete</button>";
+            echo "</form>";
+
+            echo "</td>";
+            echo "</tr>";
         }
-        ?>
+    } else {
+        echo "<tr><td colspan='5'>No users found.</td></tr>";
+    }
+    ?>
     </tbody>
 </table>
 
