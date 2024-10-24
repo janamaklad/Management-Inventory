@@ -12,8 +12,8 @@
             <ul>
                 <li><a href="Homepage.php">Home</a></li> <!-- Link updated to PHP -->
                 <li><a href="Cart.php">Cart</a></li>
-                <li><a href="signandlogin/login.php">Login</a></li> <!-- Reference login from 'signandlogin' folder -->
-                <li><a href="signandlogin/signup.php">Signup</a></li> <!-- Reference signup from 'signandlogin' -->
+                <li><a href="verify/login.php">Login</a></li> <!-- Reference login from 'signandlogin' folder -->
+                <li><a href="verify/register.php">Signup</a></li> <!-- Reference signup from 'signandlogin' -->
                 <li><a href="#">About</a></li>
                 <li><a href="#" class="button">Contact us</a></li>
             </ul>

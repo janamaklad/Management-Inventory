@@ -1,6 +1,10 @@
 <?php
 session_start();
-include 'db_connect.php';
+$servername = "localhost"; 
+$username = "root";
+$password = ""; 
+$dbname = "newmanagmentt"; 
+
 
 $product_id = $_GET['id'];
 

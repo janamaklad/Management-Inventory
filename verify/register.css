@@ -8,6 +8,8 @@
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f4f4f4;
+
+    
     color: #333;
     line-height: 1.6;
 }
@@ -65,6 +67,7 @@ label {
 }
 
 input[type="text"],
+input[type="email"],
 input[type="password"] {
     width: 100%;
     padding: 10px;
@@ -74,6 +77,7 @@ input[type="password"] {
 }
 
 input[type="text"]:focus,
+input[type="email"]:focus,
 input[type="password"]:focus {
     border-color: #007bff; 
     outline: none; 
