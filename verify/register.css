@@ -18,14 +18,19 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px; 
-    background-color: #ffffff; 
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+    padding: 0 20px; /* Adjust padding to keep space consistent */
+    background-color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    height: 80px; /* Set a fixed height for the header */
 }
 
 .logo {
-    height: 50px; 
+    height: 140px; /* Increase the logo height as desired */
+    width: auto; /* Maintain the aspect ratio */
+    margin-top: 25px; /* Adjust if needed for vertical centering */
 }
+
+
 
 .back-home {
     background-color: #e7e7e7; 
@@ -79,13 +84,13 @@ input[type="password"] {
 input[type="text"]:focus,
 input[type="email"]:focus,
 input[type="password"]:focus {
-    border-color: #007bff; 
+    border-color: #106554; 
     outline: none; 
 }
 
 .toggle-btn {
     cursor: pointer;
-    color: #007bff; 
+    color:#106554; 
     font-weight: bold;
     display: block;
     margin-top: 5px;
@@ -100,7 +105,7 @@ button[type="submit"] {
     padding: 10px;
     border: none;
     border-radius: 5px;
-    background-color: #007bff; 
+    background-color: #106554; 
     color: white;
     font-size: 1em;
     cursor: pointer;
@@ -108,7 +113,7 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-    background-color: #0056b3; 
+    background-color:#106554; 
 }
 
 .toggle-container {
@@ -117,7 +122,7 @@ button[type="submit"]:hover {
 }
 
 .toggle-container a {
-    color: #007bff; 
+    color: #106554; 
     font-weight: bold;
     text-decoration: none;
 }
