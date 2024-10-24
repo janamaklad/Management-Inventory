@@ -5,6 +5,7 @@ $username = "root";
 $password = ""; 
 $dbname = "project"; 
 
+
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -15,7 +16,7 @@ if ($conn->connect_error) {
 
 // Fetch all users from the database
 
-$sql = "SELECT id, name, email, password, usertypeid FROM users WHERE usertypeid != 2";
+$sql = "SELECT id, name, email, password, usertype_id FROM users WHERE usertype_id != 2";
 
 $result = $conn->query($sql);
 
@@ -138,14 +139,14 @@ $result = $conn->query($sql);
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             // Filter out users with usertypeid = 2 (if necessary)
-            if ($row['usertypeid'] == 2) {
+            if ($row['usertype_id'] == 2) {
                 continue;
             }
 
             echo "<tr>";
             echo "<td>" . htmlspecialchars($row["name"]) . "</td>";
             echo "<td>" . htmlspecialchars($row["email"]) . "</td>";
-            echo "<td>" . ($row["usertypeid"] == 1 ? "Admin" : "User") . "</td>";
+            echo "<td>" . ($row["usertype_id"] == 1 ? "Admin" : "User") . "</td>";
             echo "<td>";
             
             // Edit and Delete buttons

@@ -14,7 +14,11 @@
                 <li><a href="Cart.php">Cart</a></li>
                 <li><a href="verify/login.php">Login</a></li> <!-- Reference login from 'signandlogin' folder -->
                 <li><a href="verify/register.php">Signup</a></li> <!-- Reference signup from 'signandlogin' -->
+<<<<<<< HEAD
                 <li><a href="\Management-Inventory\Aboutus.php">About</a></li>
+=======
+                <li><a href="#">About</a></li>
+>>>>>>> 777de40ca7bfab7e51ae013bd9cd2c7a583c7d22
                 <li><a href="#" class="button">Contact us</a></li>
             </ul>
         </nav>
