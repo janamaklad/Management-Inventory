@@ -26,12 +26,11 @@ include('../db.php');
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
-            <li class="nav-item"><a class="nav-link" href="Cart.php">Cart</a></li>
-            <li class="nav-item"><a class="nav-link" href="\Management-Inventory\signandlogin\login.php">Login</a></li>
-            <li class="nav-item"><a class="nav-link" href="\Management-Inventory\signandlogin\signup.php">Signup</a></li>
+            <li class="nav-item"><a class="nav-link" href="\Management-Inventory\Cart\cart.php">Cart</a></li>
             <li class="nav-item"><a class="nav-link" href="\Management-Inventory\Aboutus.php">About</a></li>
             <li class="nav-item"><a class="nav-link" href="\Management-Inventory\Contact.php">Contact</a></li>
-            
+            <li class="nav-item"><a class="nav-link" href="\Management-Inventory\Admin\logout.php">Logout</a></li>
+           
         </ul>
     </div>
 </nav>
