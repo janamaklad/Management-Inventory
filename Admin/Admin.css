@@ -88,13 +88,13 @@ body {
 }
 
 .btn-add {
-    background-color:#0056b3;
+    background-color: #0056b3;
     border: none;
     margin: 4px;
 }
 
 .btn-add:hover {
-    background-color: #0056b3; 
+    background-color: #0056b3;
 }
 
 .form-control {

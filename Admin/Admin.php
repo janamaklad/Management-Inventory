@@ -112,14 +112,6 @@ $result = $conn->query($sql);
             </tbody>
         </table>
 
-        <!-- Add New Supplier Form -->
-        <h3>Add New Supplier</h3>
-        <form>
-            <input type="text" class="form-control" placeholder="Supplier Name" required>
-            <input type="text" class="form-control" placeholder="Contact Info" required>
-            <input type="text" class="form-control" placeholder="Payment Terms" required>
-            <button type="submit" class="btn btn-primary">Add Supplier</button>
-        </form>
 
 
 

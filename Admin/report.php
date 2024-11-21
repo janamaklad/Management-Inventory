@@ -19,56 +19,6 @@ include 'AdminNavBar.php';
     <div class="container mt-4">
         <h1 class="mb-4">Reports Dashboard</h1>
 
-        <!-- Filtering and Search -->
-        <div class="row mb-3">
-            <div class="col-md-4">
-                <input type="text" class="form-control" id="searchInput" placeholder="Search Reports">
-            </div>
-            <div class="col-md-4">
-                <input type="date" class="form-control" id="startDate">
-            </div>
-            <div class="col-md-4">
-                <input type="date" class="form-control" id="endDate">
-            </div>
-        </div>
-
-        <!-- Reports Table -->
-        <div class="row">
-            <div class="col-md-12">
-                <table class="table table-bordered" id="reportsTable">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Report Type</th>
-                            <th>Date</th>
-                            <th>Details</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        // Example data fetch for sales reports
-                        $sql = "SELECT id, report_type, report_date, details FROM reports";
-                        $result = $conn->query($sql);
-
-                        if ($result->num_rows > 0) {
-                            while ($row = $result->fetch_assoc()) {
-                                echo "<tr>
-                                    <td>{$row['id']}</td>
-                                    <td>{$row['report_type']}</td>
-                                    <td>{$row['report_date']}</td>
-                                    <td>{$row['details']}</td>
-                                    <td><a href='#' class='btn btn-primary btn-sm'>View</a></td>
-                                  </tr>";
-                            }
-                        } else {
-                            echo "<tr><td colspan='5'>No reports found.</td></tr>";
-                        }
-                        ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
 
         <!-- Charts Section -->
         <div class="row mt-5">
