@@ -3,7 +3,7 @@
 $servername = "localhost"; 
 $username = "root";
 $password = ""; 
-$dbname = "project"; 
+$dbname = "newmanagmentt"; 
 
 
 // Create connection
@@ -38,10 +38,9 @@ $result = $conn->query($sql);
     <!-- Sidebar -->
     <div class="sidebar">
         <h4 class="text-light">Menu</h4>
-        <a href="index.php">Dashboard</a>
         <a href="#">Stock Management</a>
+        <a href="report.php">Reports</a>
         <a href="Suppliers.php">Suppliers</a>
-        <a href="Admin/report.php">Reports</a>
         <a href="orders.php">Orders</a>
         <a href="#">Settings</a>
     </div>
