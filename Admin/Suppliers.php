@@ -141,7 +141,7 @@ $result = $conn->query($sql);
                     <a class="nav-link active" href="Suppliers.php">Suppliers</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="Admin/report.php">Reports</a>
+                    <a class="nav-link" href="report.php">Reports</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Logout</a>
