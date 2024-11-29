@@ -1,9 +1,27 @@
 function addToCart(productName) {
-    alert(productName + " has been added to your cart!");
+    const data = { productName: productName };
+
+    fetch('/Management-Inventory/Cart/cart_handler.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+    })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                alert(`${productName} added to cart!`);
+            } else {
+                alert('Failed to add product to cart.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred.');
+        });
 }
 
 // Filtering and Search Functionality
-document.getElementById('searchInput').addEventListener('keyup', function() {
+document.getElementById('searchInput').addEventListener('keyup', function () {
     let input = this.value.toLowerCase();
     let productCards = document.querySelectorAll('.card');
     productCards.forEach(card => {
@@ -12,7 +30,7 @@ document.getElementById('searchInput').addEventListener('keyup', function() {
     });
 });
 
-document.getElementById('filterSelect').addEventListener('change', function() {
+document.getElementById('filterSelect').addEventListener('change', function () {
     let filterValue = this.value;
     let productCards = document.querySelectorAll('.card');
     productCards.forEach(card => {
