@@ -60,6 +60,8 @@ if ($stmt->execute()) {
 // Fetch all users from the database
 $sql = "SELECT id, name, email FROM users"; // You don't need to fetch passwords here
 $result = $conn->query($sql);
+
+include 'adduser.html';
 ?>
 
 <!DOCTYPE html>
@@ -110,7 +112,3 @@ $result = $conn->query($sql);
     <?php endif; ?>
 </form>
 
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>

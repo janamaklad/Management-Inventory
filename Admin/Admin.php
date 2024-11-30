@@ -1,9 +1,6 @@
 <?php
 
-$servername = "localhost"; 
-$username = "root";
-$password = ""; 
-$dbname = "project"; 
+include '../db.php';
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -34,8 +31,8 @@ $result = $conn->query($sql);
     <!-- Sidebar -->
     <div class="sidebar">
         <h4 class="text-light">Menu</h4>
-        <a href="index.php">Dashboard</a>
         <a href="#">Stock Management</a>
+        <a href="report.php">Reports</a>
         <a href="Suppliers.php">Suppliers</a>
         <a href="\Management-Inventory\Admin\report.php">Reports</a>
         <a href="orders.php">Orders</a>
@@ -108,14 +105,6 @@ $result = $conn->query($sql);
             </tbody>
         </table>
 
-        <!-- Add New Supplier Form -->
-        <h3>Add New Supplier</h3>
-        <form>
-            <input type="text" class="form-control" placeholder="Supplier Name" required>
-            <input type="text" class="form-control" placeholder="Contact Info" required>
-            <input type="text" class="form-control" placeholder="Payment Terms" required>
-            <button type="submit" class="btn btn-primary">Add Supplier</button>
-        </form>
 
 
 

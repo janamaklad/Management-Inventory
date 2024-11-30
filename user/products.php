@@ -49,18 +49,18 @@ include('../db.php');
                 while ($row = $result->fetch_assoc()) {
                     echo '<div class="col-md-3">';
                     echo '  <div class="card mb-4">';
-                    // Directly use the image URL from the database for the image source
                     echo '      <img src="' . $row["image_url"] . '" class="card-img-top" alt="Product Image">';
                     echo '      <div class="card-body">';
                     echo '          <h5 class="card-title">' . $row["ProductName"] . '</h5>';
                     echo '          <p class="card-text">Price: $' . $row["Price"] . '</p>'; // Display price
                     echo '          <p class="card-text">Seller: ' . $row["SellerName"] . '</p>';
                     echo '          <p class="card-text">Available Quantity: ' . $row["Quantity"] . '</p>'; // Show available quantity
-                    echo '          <button class="btn btn-success" onclick="addToCart(\'' . $row["ProductName"] . '\')">Add to Cart</button>'; // Updated to green button
+                    echo '          <button class="btn btn-success" onclick="addToCart(\'' . addslashes($row["ProductName"]) . '\')">Add to Cart</button>'; // Add button here
                     echo '      </div>';
                     echo '  </div>';
                     echo '</div>';
                 }
+                
             } else {
                 echo '<p>No products available.</p>';
             }

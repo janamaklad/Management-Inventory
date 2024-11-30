@@ -2,89 +2,36 @@
 // submission, validation, database querying
 //user=0,admin=1
 include '../db.php';
-$email = $password = "";
-$email_err = $password_err = "";
+include 'User.php';
+
+
 session_start();
 
+$email_err = $password_err = "";
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $email = trim($_POST["email"]);
+    $password = trim($_POST["password"]);
 
-    // Validate email
-    if (isset($_POST["email"]) && empty(trim($_POST["email"]))) {
+    if (empty($email)) {
         $email_err = "Please enter your email.";
-    } else {
-        $email = trim($_POST["email"]);
     }
 
-    // Validate password
-    if (isset($_POST["password"]) && empty(trim($_POST["password"]))) {
+    if (empty($password)) {
         $password_err = "Please enter your password.";
-    } else {
-        $password = trim($_POST["password"]);
     }
 
-    // Check input errors before querying the database
     if (empty($email_err) && empty($password_err)) {
-        // Prepare a select statement
-        $sql = "SELECT id, name, password, usertype_id FROM users WHERE users.email = ?";
-        if ($stmt = $conn->prepare($sql)) {
-            // Bind variables to the prepared statement as parameters
-            $stmt->bind_param("s", $param_email);
-            $param_email = $email;
+        $user = new User($conn);
+        $error = $user->login($email, $password);
 
-            // Attempt to execute the prepared statement
-            if ($stmt->execute()) {
-                // Store result
-                $stmt->store_result();
-
-                // Check if email exists, if yes then verify password
-                if ($stmt->num_rows == 1) {
-                    // Bind result variables
-                    $stmt->bind_result($id, $name, $hashed_password, $usertypeid);
-                    if ($stmt->fetch()) {
-                        // Use password_verify to check the password against the hashed password
-                        if (password_verify($password, $hashed_password)) {
-                            // Password is correct, start a new session
-
-                            // Store data in session variables
-                            $_SESSION["loggedin"] = true;
-                            $_SESSION["id"] = $id;
-                            $_SESSION["name"] = $name;
-                            $_SESSION["usertypeid"] = $usertypeid;
-
-                            // Redirect user based on usertypeid
-                            if ($usertypeid == 0) {
-                                // Redirect to homepage.php
-                                header("Location: ../Homepage.php");
-                            } elseif ($usertypeid == 1) {
-                                // Redirect to Admin.php
-                                header("Location: ../Admin/Admin.php");
-                            } elseif ($usertypeid == 2) {
-                                // Redirect to Supplier.php
-                                header("Location: ../Admin/Suppliers.php");
-                            }
-                            exit(); // Ensure script stops after redirect
-                            
-                        } else {
-                            $password_err = "The password you entered was not valid.";
-                        }
-                    }
-                } else {
-                    $email_err = "No account found with that email.";
-                }
-            } else {
-                echo "Oops! Something went wrong. Please try again later.";
-            }
-         
-            // Close statement
-            $stmt->close();
+        if ($error) {
+            $password_err = $error;
         }
     }
-    // Close connection
-    $conn->close();
 }
 ?>
 
-<!-- structure-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -94,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Login</title>
 </head>
 <body>
-s
+
 <div class="header">
     <img src="\Management-Inventory\images\logo.png" alt="Logo" class="logo"> <!-- Update path to your logo image -->
     <button class="back-home" onclick="window.location.href='../Homepage.php'">Back to Home</button>
@@ -126,3 +73,6 @@ s
 </div>
 </body>
 </html>
+
+
+?>

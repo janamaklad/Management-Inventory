@@ -1,52 +1,90 @@
 <?php
 class User {
-    private $db;
+    private $conn;
 
+    // Constructor to initialize database connection
     public function __construct($db) {
-        $this->db = $db;
+        $this->conn = $db;
     }
 
-    // Check if the username (Name) exists
-    public function usernameExists($name) {
-        $stmt = $this->db->prepare("SELECT * FROM users WHERE Name = :name");
-        $stmt->bindParam(':name', $name);
-        $stmt->execute();
-        return $stmt->rowCount() > 0;
+    // Login function
+    public function login($email, $password) {
+        $sql = "SELECT id, name, password, usertype_id FROM users WHERE email = ?";
+        if ($stmt = $this->conn->prepare($sql)) {
+            $stmt->bind_param("s", $email);
+
+            if ($stmt->execute()) {
+                $stmt->store_result();
+
+                if ($stmt->num_rows == 1) {
+                    $stmt->bind_result($id, $name, $hashed_password, $usertypeid);
+                    if ($stmt->fetch()) {
+                        if (password_verify($password, $hashed_password)) {
+                            // Start session and set session variables
+                            session_start();
+                            $_SESSION["loggedin"] = true;
+                            $_SESSION["id"] = $id;
+                            $_SESSION["name"] = $name;
+                            $_SESSION["usertypeid"] = $usertypeid;
+
+                            // Redirect based on usertype_id
+                            switch ($usertypeid) {
+                                case 0:
+                                    header("Location: ../Homepage.php");
+                                    break;
+                                case 1:
+                                    header("Location: ../Admin/Admin.php");
+                                    break;
+                                case 2:
+                                    header("Location: ../Admin/Suppliers.php");
+                                    break;
+                            }
+                            exit();
+                        } else {
+                            return "The password you entered was not valid.";
+                        }
+                    }
+                } else {
+                    return "No account found with that email.";
+                }
+            } else {
+                return "Oops! Something went wrong. Please try again later.";
+            }
+
+            $stmt->close();
+        }
+        return null;
     }
 
-    // Register a new user
-    public function register($name, $email, $password, $usertype_id) {
-        if ($this->usernameExists($name)) {
-            return "Username already exists!";
+    // Register function
+    public function register($name, $email, $password, $confirm_password) {
+        if ($password !== $confirm_password) {
+            return "Passwords do not match.";
         }
 
-        // Hash the password for security
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-        $stmt = $this->db->prepare("INSERT INTO users (Name, Email, Password, usertype_id) VALUES (:name, :email, :password, :usertype_id)");
-        $stmt->bindParam(':name', $name);
-        $stmt->bindParam(':email', $email);
-        $stmt->bindParam(':password', $hashedPassword);
-        $stmt->bindParam(':usertype_id', $usertype_id);
-
-        if ($stmt->execute()) {
-            return "User registered successfully!";
-        } else {
-            return "Registration failed!";
+        $sql = "SELECT id FROM users WHERE email = ?";
+        if ($stmt = $this->conn->prepare($sql)) {
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+            $stmt->store_result();
+            if ($stmt->num_rows > 0) {
+                return "This email is already in use.";
+            }
+            $stmt->close();
         }
-    }
 
-    // Login a user
-    public function login($name, $password) {
-        $stmt = $this->db->prepare("SELECT * FROM users WHERE Name = :name");
-        $stmt->bindParam(':name', $name);
-        $stmt->execute();
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        $sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
+        if ($stmt = $this->conn->prepare($sql)) {
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+            $stmt->bind_param("sss", $name, $email, $hashed_password);
 
-        if ($user && password_verify($password, $user['Password'])) {
-            return "Login successful!";
-        } else {
-            return "Invalid username or password.";
+            if ($stmt->execute()) {
+                return true;
+            } else {
+                return "Registration failed. Please try again.";
+            }
         }
+        return null;
     }
 }
 ?>
