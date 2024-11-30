@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($new_password)) {
         // Hash the new password if provided
         $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
-        $sql = "UPDATE users SET name = ?, email = ?, password = ?, usertypeid = ? WHERE id = ?";
+        $sql = "UPDATE users SET name = ?, email = ?, password = ?, usertype_id = ? WHERE id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("sssii", $name, $email, $hashed_password, $usertypeid, $user_id);
     } else {
@@ -57,7 +57,7 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit User</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="your-css-file.css"> <!-- Link to the CSS file -->
+    <link rel="stylesheet" href="admin.css"> 
 </head>
 <body>
     <div class="container">

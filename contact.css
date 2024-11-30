@@ -1,4 +1,3 @@
-/* General body styles */
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f9f9f9;
@@ -6,58 +5,58 @@ body {
     padding: 0;
 }
 
-/* Container for form */
+
 .container {
     max-width: 600px;
     margin: 50px auto;
     padding: 20px;
     background: #ffffff;
-    border-radius: 10px; /* Increased radius for a softer look */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Deeper shadow for better separation */
-    transition: transform 0.3s ease; /* Subtle hover effect */
+    border-radius: 10px; 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
+    transition: transform 0.3s ease; 
 }
 
-/* Scale effect on hover */
+
 .container:hover {
-    transform: translateY(-2px); /* Slight lift effect */
+    transform: translateY(-2px); 
 }
 
-/* Header styles */
+
 h1 {
     text-align: center;
     color: #333;
-    margin-bottom: 20px; /* Space below the header */
+    margin-bottom: 20px;
 }
 
-/* Form group styles */
+
 .form-group {
-    margin-bottom: 30px; /* Increased margin for better spacing */
+    margin-bottom: 30px; 
 }
 
-/* Label styles */
+
 label {
     display: block;
-    margin-bottom: 8px; /* Space below label */
-    font-weight: bold; /* Make labels bolder */
-    color: #555; /* Darker color for better readability */
+    margin-bottom: 8px; 
+    font-weight: bold; 
+    color: #555; 
 }
 
-/* Input and textarea styles */
+
 input[type="text"],
 input[type="email"],
 textarea {
     width: 95%;
-    padding: 12px; /* Increased padding for better touch targets */
+    padding: 12px; 
     border: 1px solid #ccc;
-    border-radius: 6px; /* Softer corners */
-    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05); /* Inner shadow for depth */
-    transition: border-color 0.3s ease; /* Smooth border color change */
+    border-radius: 6px; 
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05); 
+    transition: border-color 0.3s ease;
 }
 
-/* Input focus styles */
+
 input:focus,
 textarea:focus {
-    border-color: #5cb85c; /* Highlight border color on focus */
+    border-color: #5cb85c; 
     outline: none; /* Remove default outline */
 }
 
@@ -65,28 +64,28 @@ textarea:focus {
 button {
     background-color: #070807;
     color: white;
-    padding: 12px 20px; /* Increased padding */
+    padding: 12px 20px; 
     border: none;
-    border-radius: 6px; /* Softer corners */
+    border-radius: 6px; 
     cursor: pointer;
-    font-size: 1rem; /* Make the button text slightly larger */
+    font-size: 1rem; 
     transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
 }
 
 /* Button hover effect */
 button:hover {
-    background-color: #115211; /* Darker green on hover */
-    transform: translateY(-2px); /* Lift effect on hover */
+    background-color: #115211; 
+    transform: translateY(-2px); 
 }
 
 /* Responsive adjustments */
 @media (max-width: 600px) {
     .container {
-        margin: 20px; /* Reduce margin on smaller screens */
-        padding: 15px; /* Adjust padding */
+        margin: 20px; 
+        padding: 15px; 
     }
 
     button {
-        width: 100%; /* Full-width button on small screens */
+        width: 100%; 
     }
 }

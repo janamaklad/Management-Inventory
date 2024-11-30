@@ -1,6 +1,6 @@
 <?php
 // Include the navbar
-include('navbar.php');
+include('Navbar.php');
 ?>
 
 <!DOCTYPE html>
@@ -9,13 +9,13 @@ include('navbar.php');
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us - FreshMart Inventory</title>
-    <link rel="stylesheet" href="contact.css"> <!-- Link to your CSS file -->
-    <link rel="stylesheet" href="navbar.css">
+    <link rel="stylesheet" href="contact.css"> 
+    <link rel="stylesheet" href="Navbar.css">
 </head>
 <body>
     <div class="container">
         <h1>Contact Us</h1>
-        <form action="send_contact.php" method="POST"> <!-- Action for form submission -->
+        <form action="send_contact.php" method="POST"> 
             <div class="form-group">
                 <label for="name">Name:</label>
                 <input type="text" id="name" name="name" required>

@@ -9,7 +9,7 @@
 </head>
 <body>
 <header class="text-white text-center py-3">
-    <?php include('../navbar.php'); ?> <!-- Include the navbar -->
+    <?php include('../Navbar.php'); ?> <!-- Include the navbar -->
 </header>
 
 <div class="container mt-4">
@@ -18,7 +18,7 @@
 </div>
 
 <footer class="bg-light text-center py-3">
-    <p>&copy; 2024 Inventory Management System. All rights reserved.</p>
+    <p>&copy; 2024 FreshMart Inventory System. All rights reserved.</p>
 </footer>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

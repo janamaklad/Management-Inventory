@@ -5,16 +5,12 @@ $username = "root";
 $password = ""; 
 $dbname = "project"; 
 
-
-// Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Fetch all users from the database
 
 $sql = "SELECT id, name, email, password, usertype_id FROM users WHERE usertype_id != 2";
 
@@ -27,13 +23,13 @@ $result = $conn->query($sql);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inventory Management System</title>
+    <title>FreshMart Inventory System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="Admin.css"> 
+    <link rel="stylesheet" href="admin.css"> 
 </head>
 <body>
     <!-- Include Navbar -->
-    <?php include 'AdminNavBar.php'; ?>
+    <?php include 'AdminNavbar.php'; ?>
 
     <!-- Sidebar -->
     <div class="sidebar">
@@ -41,7 +37,7 @@ $result = $conn->query($sql);
         <a href="index.php">Dashboard</a>
         <a href="#">Stock Management</a>
         <a href="Suppliers.php">Suppliers</a>
-        <a href="Admin/report.php">Reports</a>
+        <a href="\Management-Inventory\Admin\report.php">Reports</a>
         <a href="orders.php">Orders</a>
         <a href="#">Settings</a>
     </div>

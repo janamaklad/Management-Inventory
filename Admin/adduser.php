@@ -1,6 +1,6 @@
 <?php
 include '../db.php'; 
-include 'AdminNavBar.php';
+include 'AdminNavbar.php';
 
 // Function to check password strength
 function validatePassword($password) {
@@ -69,6 +69,7 @@ $result = $conn->query($sql);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add User</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="admin.css" rel="stylesheet">
 </head>
 <body>
     <div class="container">

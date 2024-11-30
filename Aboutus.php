@@ -5,15 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us - FreshMart Inventory</title>
     <link rel="stylesheet" href="aboutus.css">
-    <link rel="stylesheet" href="navbar.css">
+    <link rel="stylesheet" href="Navbar.css">
 
 </head>
 <body>
-<?php include('navbar.php'); ?>
+<?php include('Navbar.php'); ?>
     
     <div class="about-container">
         <h1>About FreshMart Inventory</h1>
-        <p>Welcome to FreshMart Inventory, your trusted partner for efficient and hassle-free inventory management. 
+        <p>Welcome to FreshMart Inventory, your trusted partner for efficient and hassle-free FreshMart Inventory. 
         We specialize in providing supermarkets with a robust, user-friendly system for keeping track of stock, orders, and more.</p>
         
         <h2>Our Mission</h2>

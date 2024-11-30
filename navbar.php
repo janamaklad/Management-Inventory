@@ -6,47 +6,51 @@
     <title>Navbar Example</title>
     <style>
         /* Navbar styles */
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-        }
+       /* Navbar styles */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
 
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #f8f9fa;
-            padding: 10px 20px;
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-        }
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f8f9fa;
+    padding: 5px 15px; /* Reduced padding around the navbar */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    height: 80px; /* Added fixed height to restrict navbar size */
+}
 
-        .navbar .logo img {
-            height: 140px;
-            margin-top: 45px;
-        }
+.navbar .logo img {
+    height: 120px; /* Further reduced logo height */
+    margin: 0; /* Removed all margins */
+    padding: 0; /* Ensured no extra padding */
+}
 
-        .navbar ul {
-            list-style-type: none;
-            display: flex;
-            gap: 20px;
-            margin: 0;
-            padding: 0;
-        }
+.navbar ul {
+    list-style-type: none;
+    display: flex;
+    gap: 15px;
+    margin: 0;
+    padding: 0;
+}
 
-        .navbar ul li {
-            display: inline;
-        }
+.navbar ul li {
+    display: inline;
+}
 
-        .navbar ul li a {
-            text-decoration: none;
-            color: #333;
-            font-size: 17px;
-            transition: color 0.3s ease;
-        }
+.navbar ul li a {
+    text-decoration: none;
+    color: #333;
+    font-size: 15px; /* Reduced font size */
+    transition: color 0.3s ease;
+}
 
-        .navbar ul li a:hover {
-            color: gray;
-        }
+.navbar ul li a:hover {
+    color: gray;
+}
+
     </style>
 </head>
 <body>
@@ -61,7 +65,7 @@
         
         <!-- Links section -->
         <ul>
-            <li><a href="C:\xampp\htdocs\Management-Inventory\Cart\ViewCart.php">Cart</a></li>
+            <li><a href="\Management-Inventory\Cart\ViewCart.php">Cart</a></li>
             <li><a href="\Management-Inventory\verify\login.php">Login</a></li>
             <li><a href="\Management-Inventory\verify\register.php">Signup</a></li>
             <li><a href="\Management-Inventory\Aboutus.php">About</a></li>

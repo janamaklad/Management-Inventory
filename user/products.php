@@ -8,33 +8,13 @@ include('../db.php');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inventory Management System</title>
+    <title>FreshMart Inventory System</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="products.css">
+    <link rel="stylesheet" href="products.css"> 
+    <link rel="stylesheet" href="../Navbar.css">
 </head>
 <body>
-    <header class="text-white text-center py-3">
-    <link rel="stylesheet" href="../navbar.css">
-
-<nav class="navbar navbar-expand-lg navbar-light">
-    <!-- Logo that links to the homepage -->
-    <a class="navbar-brand" href="../Homepage.php">
-        <img src="\Management-Inventory\images\logo.png" alt="e-mart Inventory Logo" class="logo">
-    </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item"><a class="nav-link" href="Cart.php">Cart</a></li>
-            <li class="nav-item"><a class="nav-link" href="\Management-Inventory\signandlogin\login.php">Login</a></li>
-            <li class="nav-item"><a class="nav-link" href="\Management-Inventory\signandlogin\signup.php">Signup</a></li>
-            <li class="nav-item"><a class="nav-link" href="\Management-Inventory\Aboutus.php">About</a></li>
-            <li class="nav-item"><a class="nav-link" href="\Management-Inventory\Contact.php">Contact</a></li>
-            
-        </ul>
-    </div>
-</nav>
+<?php include('../Navbar.php'); ?>
 
     </header>
 
@@ -89,7 +69,7 @@ include('../db.php');
     </div>
 
     <footer class="bg-light text-center py-3">
-        <p>&copy; 2024 Inventory Management System. All rights reserved.</p>
+        <p>&copy; 2024 FreshMart Inventory System. All rights reserved.</p>
     </footer>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

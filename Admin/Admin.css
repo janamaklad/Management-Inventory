@@ -2,15 +2,7 @@
 body {
     background-color: #f8f9fa;
     margin: 0;
-    /* Remove default margin */
     overflow: hidden;
-    /* Prevent scrollbars on body */
-}
-
-body {
-    overflow: auto;
-    padding-top: 60px;
-
 }
 
 .navbar {
@@ -24,15 +16,11 @@ body {
 
 .sidebar {
     height: 100vh;
-    /* Full height */
     background-color: #343a40;
     padding: 1rem;
     position: fixed;
-    /* Fix to the left */
     width: 200px;
-    /* Fixed width */
     overflow-y: auto;
-    /* Allow scrolling for long sidebar content */
 }
 
 .sidebar a {
@@ -49,12 +37,9 @@ body {
 
 .main-content {
     margin-left: 200px;
-    /* Offset by sidebar width */
     padding: 2rem;
     height: calc(100vh - 56px);
-    /* Full height minus navbar height */
     overflow-y: auto;
-    /* Allow scrolling for long content */
 }
 
 .card {
@@ -70,7 +55,6 @@ body {
     background-color: #007bff;
     border: none;
     margin: 4px;
-    /* Adjust margin */
 }
 
 .btn-primary:hover {
@@ -88,13 +72,13 @@ body {
 }
 
 .btn-add {
-    background-color:#0056b3;
+    background-color: #0056b3;
     border: none;
     margin: 4px;
 }
 
 .btn-add:hover {
-    background-color: #0056b3; 
+    background-color: #0056b3;
 }
 
 .form-control {
@@ -103,4 +87,61 @@ body {
 
 .text-muted {
     font-size: 0.875rem;
+}
+
+/* Media Queries */
+@media (max-width: 992px) {
+    .sidebar {
+        width: 150px;
+    }
+
+    .main-content {
+        margin-left: 150px;
+        padding: 1.5rem;
+    }
+
+    .btn-primary,
+    .btn-add {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        position: absolute;
+        width: 100%;
+        height: auto;
+        display: none; /* Hide sidebar for smaller screens */
+    }
+
+    .sidebar.active {
+        display: block; /* Show sidebar when active */
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 1rem;
+    }
+
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 576px) {
+    .main-content {
+        padding: 0.5rem;
+    }
+
+    .btn-primary,
+    .btn-add {
+        padding: 0.2rem 0.4rem;
+        font-size: 0.75rem;
+    }
+
+    .table {
+        font-size: 0.875rem;
+    }
 }

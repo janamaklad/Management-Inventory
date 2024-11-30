@@ -1,6 +1,6 @@
 <?php
 include '../db.php';
-include 'AdminNavBar.php';
+include 'AdminNavbar.php';
 
 // Handle Create/Update Supplier
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -12,6 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Server-side Email Validation
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        // Display alert and redirect if email format is invalid
         echo "<script>alert('Invalid email format'); window.location.href = 'suppliers.php';</script>";
         exit();
     }
@@ -120,7 +121,7 @@ $result = $conn->query($sql);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Suppliers Management</title>
-    <link rel="stylesheet" href="Admin.css"> 
+    <link rel="stylesheet" href="admin.css"> 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>

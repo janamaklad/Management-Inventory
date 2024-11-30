@@ -1,4 +1,6 @@
 <?php
+// submission, validation, database querying
+//user=0,admin=1
 include '../db.php';
 $email = $password = "";
 $email_err = $password_err = "";
@@ -82,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-<!-- HTML Login Form -->
+<!-- structure-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -116,7 +118,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
         <div class="toggle-container">
             <span>Don't have an account?</span>
-            <a href="signup.php" class="toggle-btn">Sign Up</a>
+            <a href="\Management-Inventory\verify\register.php" class="toggle-btn">Sign Up</a>
         </div>
     </div>
 </div>
