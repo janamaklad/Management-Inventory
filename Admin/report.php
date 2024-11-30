@@ -86,7 +86,7 @@ include 'AdminNavbar.php';
 
     <script>
 // After fetching the stock data
-$.getJSON('report_data.php', function(data) {
+$.getJSON('report_data.php', function(data) { //AJAX is used to fetch data from the server without reloading the entire web page
     // Sales Chart
     var salesCtx = document.getElementById('salesChart').getContext('2d');
     var salesChart = new Chart(salesCtx, {

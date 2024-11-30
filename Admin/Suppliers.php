@@ -40,7 +40,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt_user->bind_param("sssi", $supplier_name, $email, $hashed_password, $supplier_id);
         } else {
             $stmt_user = $conn->prepare("UPDATE users SET Name=?, Email=? WHERE id=(SELECT user_id FROM suppliers WHERE id=?)");
-            $stmt_user->bind_param("ssi", $supplier_name, $email, $supplier_id);
+            $stmt_user->bind_param("ssi", $supplier_name, $email, $supplier_id); 
+            //protects against SQL injection attacks by ensuring that the input is properly escaped.
         }
         $stmt_user->execute();
         $stmt_user->close();
@@ -114,6 +115,7 @@ if (isset($_GET['delete'])) {
 $sql = "SELECT * FROM suppliers WHERE is_deleted = 0";
 $result = $conn->query($sql);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

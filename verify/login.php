@@ -94,12 +94,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Login</title>
 </head>
 <body>
+s
 <div class="header">
     <img src="\Management-Inventory\images\logo.png" alt="Logo" class="logo"> <!-- Update path to your logo image -->
     <button class="back-home" onclick="window.location.href='../Homepage.php'">Back to Home</button>
 </div>
 <div class="container">
     <div class="form-container">
+
         <h1>Login</h1>
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <div class="form-group">
