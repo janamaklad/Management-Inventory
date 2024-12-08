@@ -29,7 +29,7 @@ if (session_status() == PHP_SESSION_NONE) {
         <h2 class="text-center">Available Products</h2>
 
         <div class="row mb-3">
-            <div class="col-md-4">a
+            <div class="col-md-4">
                 <input type="text" class="form-control" id="searchInput" placeholder="Search products...">
             </div>
             <div class="col-md-4">
