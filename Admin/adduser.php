@@ -2,6 +2,11 @@
 include '../db.php'; 
 include 'AdminNavbar.php';
 
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+
 // Function to check password strength
 function validatePassword($password) {
     return preg_match("/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{6,}$/", $password);

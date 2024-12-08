@@ -1,3 +1,9 @@
+<?php
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,7 +18,7 @@
         <nav>
             <ul>
                 <li><a href="Homepage.php">Home</a></li> 
-                <li><a href="\Management-Inventory\Cart\ViewCart.php">Cart</a></li>
+                <li><a href="\Management-Inventory\Cart\cart.php">Cart</a></li>
                 <li><a href="verify/login.php">Login</a></li>
                 <li><a href="verify/register.php">Signup</a></li> 
                 <li><a href="\Management-Inventory\Aboutus.php">About</a></li>

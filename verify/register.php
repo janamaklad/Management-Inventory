@@ -3,7 +3,9 @@
 include '../db.php';
 include 'User.php';
 
-session_start();
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Initialize variables to avoid undefined variable warnings
 $name = $email = $password = $confirm_password = "";

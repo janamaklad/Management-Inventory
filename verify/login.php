@@ -5,7 +5,9 @@ include '../db.php';
 include 'User.php';
 
 
-session_start();
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 $email_err = $password_err = "";
 

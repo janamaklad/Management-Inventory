@@ -1,6 +1,8 @@
 <?php
 include 'AdminNavBar.php'; 
-session_start();
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 include '../db.php';
 
 $email_err = $password_err = $general_err = "";

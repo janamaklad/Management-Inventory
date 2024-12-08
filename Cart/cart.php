@@ -53,16 +53,55 @@ function calculateCartTotal() {
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 </head>
 <body>
-<header class="text-white text-center py-3">
-    <?php include('../Navbar.php'); ?> <!-- Include the navbar -->
-</header>
+    <header class="text-white text-center py-3">
+        <?php include('../navbar.php'); ?>
+    </header>
 
     <div class="container mt-4">
         <h2>Your Cart</h2>
 
-<footer class="bg-light text-center py-3">
-    <p>&copy; 2024 FreshMart Inventory System. All rights reserved.</p>
-</footer>
+        <?php if (!empty($_SESSION['cart'])): ?>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="cartBody">
+                    <?php
+                    $total = 0;
+                    foreach ($_SESSION['cart'] as $productName => $item):
+                        $itemTotal = $item['price'] * $item['quantity'];
+                        $total += $itemTotal;
+                    ?>
+                        <tr data-product="<?= htmlspecialchars($productName) ?>">
+                            <td><?= htmlspecialchars($item['name']) ?></td>
+                            <td>$<?= number_format($item['price'], 2) ?></td>
+                            <td>
+                                <input type="number" 
+                                       class="form-control quantity-input" 
+                                       value="<?= $item['quantity'] ?>" 
+                                       min="0" 
+                                       data-product="<?= htmlspecialchars($productName) ?>" 
+                                       style="width: 80px;">
+                            </td>
+                            <td class="item-total">$<?= number_format($itemTotal, 2) ?></td>
+                            <td>
+                                <button class="btn btn-danger btn-sm delete-btn" data-product="<?= htmlspecialchars($productName) ?>">Delete</button>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+            <h3>Total: $<span id="cartTotal"><?= number_format($total, 2) ?></span></h3>
+        <?php else: ?>
+            <p>Your cart is empty.</p>
+        <?php endif; ?>
+    </div>
 
     <footer class="bg-light text-center py-3">
         <p>&copy; 2024 Inventory Management System. All rights reserved.</p>

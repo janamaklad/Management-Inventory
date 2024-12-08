@@ -1,4 +1,10 @@
 <!-- Navbar.php -->
+<?php
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+?>
+
 <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
         <a class="navbar-brand" href="\Management-Inventory\Admin\Admin.php">FreshMart Inventory</a>

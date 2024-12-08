@@ -3,6 +3,10 @@ include '../db.php';
 include 'AdminNavBar.php';
 include '../classes/Product.php'; // Assuming you have a Product class
 include '../classes/Order.php';   // Assuming you have an Order class
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
 
 // Handle form submission for creating a new order
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['create_order'])) {

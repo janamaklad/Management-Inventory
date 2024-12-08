@@ -1,7 +1,14 @@
 <?php
 // Include database connection
 include('../db.php');
+
+// Start the session only if it hasn’t already started
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -22,7 +29,7 @@ include('../db.php');
         <h2 class="text-center">Available Products</h2>
 
         <div class="row mb-3">
-            <div class="col-md-4">
+            <div class="col-md-4">a
                 <input type="text" class="form-control" id="searchInput" placeholder="Search products...">
             </div>
             <div class="col-md-4">

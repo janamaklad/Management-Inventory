@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -65,7 +67,7 @@ body {
         
         <!-- Links section -->
         <ul>
-            <li><a href="\Management-Inventory\Cart\ViewCart.php">Cart</a></li>
+            <li><a href="\Management-Inventory\Cart\cart.php">Cart</a></li>
             <li><a href="\Management-Inventory\verify\login.php">Login</a></li>
             <li><a href="\Management-Inventory\verify\register.php">Signup</a></li>
             <li><a href="\Management-Inventory\Aboutus.php">About</a></li>

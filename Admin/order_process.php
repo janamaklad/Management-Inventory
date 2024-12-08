@@ -2,6 +2,10 @@
 include '../db.php'; // Include the database connection
 include '../classes/Product.php'; // Include the Product class
 include '../classes/Order.php'; // Include the Order class
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $productId = $_POST['product_id'];  // ID of the product ordered

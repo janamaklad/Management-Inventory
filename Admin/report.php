@@ -2,6 +2,11 @@
 // Include database connection file
 include '../db.php'; 
 include 'AdminNavbar.php';
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+
 ?>
 
 <!DOCTYPE html>
