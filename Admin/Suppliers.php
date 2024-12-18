@@ -1,7 +1,13 @@
 <?php
 include '../db.php';
-include 'AdminNavbar.php';
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
+if (empty($_SESSION['id']) || ($_SESSION['usertypeid'] != 1 && $_SESSION['usertypeid'] != 2)) {
+    header("Location: ./Suppliers.php?error=access_denied");
+    exit();
+}
 // Handle Create/Update Supplier
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $supplier_name = $_POST['supplier_name']; 
@@ -300,4 +306,5 @@ function prepareAddSupplier() {
 <?php
 // Close connection
 $conn->close();
+session_destroy();
 ?>
