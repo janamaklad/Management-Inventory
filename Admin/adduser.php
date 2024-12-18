@@ -1,11 +1,11 @@
 <?php
-include '../db.php'; 
+include '../db.php';
 include 'AdminNavbar.php';
+include '../verify/User.php'; 
 
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-
 
 // Function to check password strength
 function validatePassword($password) {
@@ -19,48 +19,55 @@ $email_error = "";
 $password_error = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+    $username = trim($_POST['username']);
+    $email = trim($_POST['email']);
+    $password = trim($_POST['password']);
+    $confirm_password = trim($_POST['password']); // Add confirm password
     $role = $_POST['role']; // Capture the selected role
 
-    // Validate password strength
-    if (!validatePassword($password)) {
+    // Field validations
+    if (empty($username)) {
+        $username_error = "Username is required.";
+    }
+    if (empty($email)) {
+        $email_error = "Email is required.";
+    }
+    if (empty($password)) {
+        $password_error = "Password is required.";
+    } elseif (!validatePassword($password)) {
         $password_error = "Password must contain at least one uppercase letter, one lowercase letter, one number, one special character, and be at least 6 characters long.";
-    } else {
-        // Check if the email already exists
-        $sql = "SELECT * FROM users WHERE email = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if ($result->num_rows > 0) {
-            $email_error = "This email is already registered!";
-        } else {
-            // Hash the password before saving
-            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-            
-          // Set UserType-id based on the selected role
-$usertype_id = ($role === 'admin') ? 1 : 0; // Set admin = 1, user = 0
-
-// Insert the new user with UserType-id
-$sql = "INSERT INTO users (name, email, password, usertype_id) VALUES (?, ?, ?, ?)";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("sssi", $username, $email, $hashed_password, $usertype_id);
-
-if ($stmt->execute()) {
-    // Redirect to the user management page after adding the user
-    header("Location: ../Admin/Admin.php");
-    exit();
-} else {
-    $error_message = "Error adding user!";
-}
-
-            }
-        }
     }
 
+    if (empty($username_error) && empty($email_error) && empty($password_error)) {
+        // Initialize the User class
+        $user = new User($conn);
+
+        // Set UserType-id based on the selected role
+        $usertype_id = ($role === 'admin') ? 1 : 0;
+
+        // Call the register function
+        $result = $user->register($username, $email, $password, $confirm_password);
+
+        if ($result === true) {
+            // If registration is successful, update usertype_id
+            $sql = "UPDATE users SET usertype_id = ? WHERE email = ?";
+            $stmt = $conn->prepare($sql);
+            if ($stmt) {
+                $stmt->bind_param("is", $usertype_id, $email);
+                $stmt->execute();
+
+                // Redirect to the user management page
+                header("Location: ../Admin/Admin.php");
+                exit();
+            } else {
+                $error_message = "Error updating user type: " . $conn->error;
+            }
+        } else {
+            // Handle errors from the register function
+            $error_message = $result;
+        }
+    }
+}
 
 // Fetch all users from the database
 $sql = "SELECT id, name, email FROM users"; // You don't need to fetch passwords here
@@ -68,6 +75,3 @@ $result = $conn->query($sql);
 
 include 'adduser.html';
 ?>
-
-
-
