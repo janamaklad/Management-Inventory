@@ -88,5 +88,38 @@ class User {
         }
         return null;
     }
+
+
+     // Edit user details
+     public function edit($user_id, $name, $email, $password = null, $role) {
+        $usertype_id = ($role === 'admin') ? 1 : 0;
+
+        if (!empty($password)) {
+            // Validate password
+            if (!preg_match('/[A-Z]/', $password) || 
+                !preg_match('/[0-9]/', $password) || 
+                !preg_match('/[!@#$%^&*(),.?":{}|<>]/', $password) || 
+                strlen($password) < 8) {
+                return "Password must be at least 8 characters long and include one uppercase letter, one number, and one special character.";
+            }
+
+            // Hash the new password
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+            $sql = "UPDATE users SET name = ?, email = ?, password = ?, usertype_id = ? WHERE id = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("sssii", $name, $email, $hashed_password, $usertype_id, $user_id);
+        } else {
+            // If no password is provided, do not update the password field
+            $sql = "UPDATE users SET name = ?, email = ?, usertype_id = ? WHERE id = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("ssii", $name, $email, $usertype_id, $user_id);
+        }
+
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            return "Error updating user!";
+        }
+    }
 }
 ?>

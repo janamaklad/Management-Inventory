@@ -10,6 +10,11 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+if (empty($_SESSION['id']) || $_SESSION['usertypeid'] != 1) {
+    // Redirect to a login page with an error message
+    header("Location: ./Admin.php?error=access_denied");
+    exit();
+}
 
 $sql = "SELECT id, name, email, password, usertype_id FROM users WHERE usertype_id != 2";
 
@@ -158,4 +163,5 @@ $result = $conn->query($sql);
 
 <?php
 $conn->close();
+//session_destroy();
 ?>
