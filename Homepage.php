@@ -16,12 +16,16 @@ if (isset($_GET['error'])) {
     <title>FreshMart Inventory</title>
     <link rel="stylesheet" href="Design.css"> 
     <link rel="stylesheet" href="navbar.css">
+    <script>
+        function showAlert(message) {
+            alert(message);
+        }
+    </script>
 </head>
 <body>
     <header>
         <nav>
             <ul>
-                <li><a href="Homepage.php">Home</a></li>
                 <li><a href="/Management-Inventory/Cart/cart.php">Cart</a></li>
 
                 <?php 
@@ -29,18 +33,21 @@ if (isset($_GET['error'])) {
                 if (!empty($_SESSION['id'])) {
                     echo "<li><a href='view.php'>View Profile</a></li>";
                     echo "<li><a href='Admin/edituser.php'>Edit Profile</a></li>";
+                   echo" <li><a href='/Management-Inventory/Aboutus.php'>About</a></li>";
+                    echo"<li><a href='/Management-Inventory/Contact.php'class='button'>Contact us</a></li>";
                     echo "<li><a href='Admin/logout.php'>Log Out</a></li>";
                 } else {
-                    // Show links that trigger error messages
-                    echo "<li><a href='?error=You must log in or sign up to access View Profile'>View Profile</a></li>";
-                    echo "<li><a href='?error=You must log in or sign up to access Edit Profile'>Edit Profile</a></li>";
+                    // Add `onclick` for showing an alert message
+                    echo "<li><a href='#' onclick=\"showAlert('You must log in or sign up to access View Profile')\">View Profile</a></li>";
+                    echo "<li><a href='#' onclick=\"showAlert('You must log in or sign up to access Edit Profile')\">Edit Profile</a></li>";
+                    echo "<li><a href='/Management-Inventory/Aboutus.php'>About</a></li>";
+                   echo " <li><a href='/Management-Inventory/Contact.php' class='button'>Contact us</a></li>";
                     echo "<li><a href='verify/login.php'>Login</a></li>";
                     echo "<li><a href='verify/register.php'>Signup</a></li>";
                 }
                 ?>
 
-                <li><a href="/Management-Inventory/Aboutus.php">About</a></li>
-                <li><a href="/Management-Inventory/Contact.php" class="button">Contact us</a></li>
+             
             </ul>
         </nav>
     </header>

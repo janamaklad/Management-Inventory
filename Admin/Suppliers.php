@@ -134,8 +134,10 @@ $result = $conn->query($sql);
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-  <!-- navbar.php -->
-<nav class="navbar navbar-expand-lg">
+<?php
+if (empty($_SESSION['id']) || ($_SESSION['usertypeid'] == 1)) {
+    ?>
+    <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">Inventory System</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -143,23 +145,50 @@ $result = $conn->query($sql);
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-               
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Stock Management</a>
+            <li class="nav-item">
+                    <a class="nav-link" href="Admin.php">Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="Suppliers.php">Suppliers</a>
+                    <a class="nav-link" href="#">Stock Management</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="report.php">Reports</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Logout</a>
+                    <a class="nav-link" href="logout.php">Logout</a>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
+<?php
+} else {
+    ?>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Inventory System</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Stock Management</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="report.php">Reports</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="logout.php">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <?php
+}
+?>
+
     <div class="container mt-5">
         <h2>Suppliers Management</h2>
 
@@ -306,5 +335,5 @@ function prepareAddSupplier() {
 <?php
 // Close connection
 $conn->close();
-session_destroy();
+//session_destroy();
 ?>

@@ -67,11 +67,20 @@ body {
         
         <!-- Links section -->
         <ul>
-            <li><a href="\Management-Inventory\Cart\cart.php">Cart</a></li>
-            <li><a href="\Management-Inventory\verify\login.php">Login</a></li>
-            <li><a href="\Management-Inventory\verify\register.php">Signup</a></li>
-            <li><a href="\Management-Inventory\Aboutus.php">About</a></li>
-            <li><a href="\Management-Inventory\Contact.php">Contact</a></li>
+        <ul>
+                <li><a href="Homepage.php">Home</a></li>
+                <li><a href="/Management-Inventory/Cart/cart.php">Cart</a></li>
+
+                <?php 
+                // If the user is logged in
+                if (!empty($_SESSION['id'])) {
+                    echo "<li><a href='Admin/logout.php'>Log Out</a></li>";
+                } else {
+                    
+                    echo "<li><a href='verify/login.php'>Login</a></li>";
+                    echo "<li><a href='verify/register.php'>Signup</a></li>";
+                }
+                ?>
         </ul>
     </nav>
 
