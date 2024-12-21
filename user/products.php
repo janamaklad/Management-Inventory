@@ -45,33 +45,33 @@ if (session_status() == PHP_SESSION_NONE) {
         </div>
 
         <div class="row" id="productContainer">
-            <?php
-            // Fetch products from the database
-            $sql = "SELECT * FROM products";
-            $result = $conn->query($sql);
+        <?php
+// Fetch products from the database
+$sql = "SELECT * FROM products";
+$result = $conn->query($sql);
 
-            // Check if there are products in the database
-            if ($result->num_rows > 0) {
-                // Loop through and display products
-                while ($row = $result->fetch_assoc()) {
-                    echo '<div class="col-md-3">';
-                    echo '  <div class="card mb-4">';
-                    echo '      <img src="' . $row["image_url"] . '" class="card-img-top" alt="Product Image">';
-                    echo '      <div class="card-body">';
-                    echo '          <h5 class="card-title">' . $row["ProductName"] . '</h5>';
-                    echo '          <p class="card-text">Price: $' . $row["Price"] . '</p>'; // Display price
-                    echo '          <p class="card-text">Seller: ' . $row["SellerName"] . '</p>';
-                    echo '          <p class="card-text">Available Quantity: ' . $row["Quantity"] . '</p>'; // Show available quantity
-                    echo '          <button class="btn btn-success" onclick="addToCart(\'' . addslashes($row["ProductName"]) . '\')">Add to Cart</button>'; // Add button here
-                    echo '      </div>';
-                    echo '  </div>';
-                    echo '</div>';
-                }
-                
-            } else {
-                echo '<p>No products available.</p>';
-            }
-            ?>
+// Check if there are products in the database
+if ($result->num_rows > 0) {
+    // Loop through and display products
+    while ($row = $result->fetch_assoc()) {
+        echo '<div class="col-md-3">';
+        echo '  <div class="card mb-4" data-category="' . strtolower($row["Category"]) . '">';
+        echo '      <img src="' . $row["image_url"] . '" class="card-img-top" alt="Product Image">';
+        echo '      <div class="card-body">';
+        echo '          <h5 class="card-title">' . $row["ProductName"] . '</h5>';
+        echo '          <p class="card-text">Price: $' . $row["Price"] . '</p>';
+        echo '          <p class="card-text">Category: ' . $row["Category"] . '</p>';
+        echo '          <p class="card-text">Available Quantity: ' . $row["Quantity"] . '</p>';
+        echo '          <button class="btn btn-success" onclick="addToCart(\'' . addslashes($row["ProductName"]) . '\')">Add to Cart</button>';
+        echo '      </div>';
+        echo '  </div>';
+        echo '</div>';
+    }
+} else {
+    echo '<p>No products available.</p>';
+}
+?>
+
         </div>
     </div>
 

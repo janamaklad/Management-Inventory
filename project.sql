@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 29, 2024 at 07:55 PM
+-- Generation Time: Dec 08, 2024 at 07:59 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -118,10 +118,10 @@ INSERT INTO `products` (`ID`, `ProductName`, `Price`, `SellerName`, `Picture`, `
 (1, 'Tea', 100, 'Lipton', '', 5, '\\Management-Inventory\\images\\tea.jpg', 0, 'Coffee and Tea'),
 (2, 'Nescafe', 50, 'Nestle', '', 25, '\\Management-Inventory\\images\\nescafe.jpg', 0, 'Coffee and Tea'),
 (3, 'Ice cream', 40, 'Nestle', '', 20, '\\Management-Inventory\\images\\ice cream.webp', 0, 'Sweets'),
-(7, 'chocolate', 20, 'Dairy Milk', '', 40, '/Management-Inventory/images/vegan-milk-chocolate-recipe.jpg', 5, 'Sweets'),
-(11, 'Redbull', 70, 'redbull', '', 50, '\\Management-Inventory\\images\\redbull.png', 0, 'Drinks'),
-(12, 'croissant', 20, 'TBS', '', 9, '/Management-Inventory/images/images.jpg', 0, 'Bakery'),
-(13, 'TOMATO', 10, 'tomato', '', 50, '\\Management-Inventory\\images\\TOMATO.jpg', 0, 'Groceries');
+(7, 'Chocolate', 20, 'Dairy Milk', '', 40, '/Management-Inventory/images/vegan-milk-chocolate-recipe.jpg', 5, 'Sweets'),
+(11, 'Redbull', 70, 'Redbull', '', 50, '\\Management-Inventory\\images\\redbull.png', 0, 'Drinks'),
+(12, 'Croissant', 20, 'TBS', '', 9, '/Management-Inventory/images/images.jpg', 0, 'Bakery'),
+(13, 'Tomato ', 10, 'Tomato', '', 50, '\\Management-Inventory\\images\\TOMATO.jpg', 0, 'Groceries');
 
 -- --------------------------------------------------------
 
@@ -178,7 +178,9 @@ INSERT INTO `users` (`ID`, `Name`, `Email`, `Password`, `usertype_id`) VALUES
 (6, 'Bahig', 'bahigmahmoud@gamil.com', '$2y$10$aDTTEDzJO.xYT3IB/30iD.EwN6QKCbLekhBxVta21yeHj2SqUghn2', 0),
 (7, 'ahmed', 'ahmed@gmail.com', '$2y$10$rho/mS8dLu1fRZ9mcuc39.rCD9h/4ucUqklnd5LFh7VQ90pyxBZ/y', 1),
 (8, 'omar', 'omar@gmail.com', '$2y$10$68HIQ36YuO7F/oLpWz1e5OaV9CEiprmfhEqsyi6JgySZFkOU76.Ze', 0),
-(9, 'Hania Maher', 'Hania2205040@miue', '$2y$10$0ytwQ2OQfoDW3w0oyQ1TneI6NBzMQnJM5V8CoFzvTdQ77NtxhB9aq', 0);
+(9, 'Hania Maher', 'Hania2205040@miue', '$2y$10$0ytwQ2OQfoDW3w0oyQ1TneI6NBzMQnJM5V8CoFzvTdQ77NtxhB9aq', 0),
+(10, 'Dina tarek', 'dina@gmail.com', '$2y$10$J.xJoMdk0WKPXSW1lh7FoOae1MA7IzEOllG.AerXdfaHbcRt6j/5i', 0),
+(11, 'DrSalwa', 'DrSalwa@gmail.com', '$2y$10$bmPIFhbGodbbEEWFMVAb6ejyrUVcHk7GEsU943Qx6WCk573JIYXYO', 1);
 
 -- --------------------------------------------------------
 
@@ -307,7 +309,7 @@ ALTER TABLE `suppliers`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- Constraints for dumped tables
