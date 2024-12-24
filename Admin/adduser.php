@@ -11,7 +11,6 @@ if (session_status() == PHP_SESSION_NONE) {
 function validatePassword($password) {
     return preg_match("/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{6,}$/", $password);
 }
-
 // Initialize error messages
 $error_message = "";
 $username_error = "";
@@ -68,10 +67,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
+if (empty($_SESSION['id']) ) {
+    // Redirect to a login page with an error message
+    header("Location: ./adduser.php?error=access_denied");
+}
 
 // Fetch all users from the database
 $sql = "SELECT id, name, email FROM users"; // You don't need to fetch passwords here
 $result = $conn->query($sql);
-
 include 'adduser.html';
 ?>

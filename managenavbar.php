@@ -2,6 +2,7 @@
 include 'db.php';
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
+ 
 }
 
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -10,8 +11,8 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-if (empty($_SESSION['id']) || $_SESSION['usertypeid'] != 1) {
-    header("Location: ./Admin.php?error=access_denied");
+if (empty($_SESSION['id']) ) {
+    header("Location: ./managenavbar.php?error=access_denied");
     exit();
 }
 
