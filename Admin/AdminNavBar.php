@@ -1,8 +1,19 @@
-<!-- Navbar.php -->
 <?php
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
+
+include '../db.php';
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Fetch navbar items for usertype_id = 1
+$sql = "SELECT button_name, pagelink FROM navbar_buttons WHERE usertype_id = 1";
+$navbarButtons = $conn->query($sql);
 ?>
 
 <nav class="navbar navbar-expand-lg">
@@ -13,21 +24,19 @@ if (session_status() == PHP_SESSION_NONE) {
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="Admin.php">Dashboard</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Stock Management</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="Suppliers.php">Suppliers</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="\Management-Inventory\Admin\report.php">Reports</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="logout.php">Logout</a>
-                </li>
+                <?php
+                if ($navbarButtons->num_rows > 0) {
+                    while ($button = $navbarButtons->fetch_assoc()) {
+                        echo "<li class='nav-item'>
+                                <a class='nav-link' href='" . htmlspecialchars($button['pagelink']) . "'>" . htmlspecialchars($button['button_name']) . "</a>
+                              </li>";
+                    }
+                } else {
+                    echo "<li class='nav-item'>
+                            <a class='nav-link disabled' href='#'>No Menu Items</a>
+                          </li>";
+                }
+                ?>
             </ul>
         </div>
     </div>

@@ -1,27 +1,32 @@
 <?php
-
 include '../db.php';
+
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
+
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// Ensure the session user has proper access
 if (empty($_SESSION['id']) || $_SESSION['usertypeid'] != 1) {
-    // Redirect to a login page with an error message
     header("Location: ./Admin.php?error=access_denied");
     exit();
 }
 
+// Define and execute the SQL query
 $sql = "SELECT id, name, email, password, usertype_id FROM users WHERE usertype_id != 2";
-
 $result = $conn->query($sql);
 
-?>
+// Check for query execution errors
+if (!$result) {
+    die("Error executing query: " . $conn->error);
+}
 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -53,6 +58,10 @@ $result = $conn->query($sql);
     <!-- Main Content -->
     <div class="main-content">
         <h2>Dashboard</h2>
+        
+        <!-- New Button to Manage Navbar Buttons -->
+        <a href="../managenavbar.php" class="btn btn-info btn-sm mb-4">Manage Navbar Buttons</a>
+        
         <div class="row">
             <!-- Cards showing some stats -->
             <div class="col-md-4">
@@ -80,7 +89,8 @@ $result = $conn->query($sql);
                 </div>
             </div>
         </div>
- <!-- Stock Management Table -->
+        
+        <!-- Stock Management Table -->
         <h3>Stock Management</h3>
         <table class="table table-hover">
             <thead>
@@ -116,56 +126,45 @@ $result = $conn->query($sql);
             </tbody>
         </table>
 
-
-
-
-<!-- User Management Section -->
-<h3 class="mt-5">User Management</h3>
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-    <?php
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            // Filter out users with usertypeid = 2 (if necessary)
-            if ($row['usertype_id'] == 2) {
-                continue;
+        <!-- User Management Section -->
+        <h3 class="mt-5">User Management</h3>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    echo "<tr>";
+                    echo "<td>" . htmlspecialchars($row["name"]) . "</td>";
+                    echo "<td>" . htmlspecialchars($row["email"]) . "</td>";
+                    echo "<td>" . ($row["usertype_id"] == 1 ? "Admin" : "User") . "</td>";
+                    echo "<td>";
+                    echo "<a href='edituser.php?id=" . $row['id'] . "' class='btn btn-primary btn-sm mx-2'>Edit</a>";
+                    echo "<form method='post' action='deleteuser.php' style='display:inline-block'>"; 
+                    echo "<input type='hidden' name='user_id' value='" . $row['id'] . "'>";
+                    echo "<button type='submit' class='btn btn-danger btn-sm mx-2'>Delete</button>";
+                    echo "</form>";
+                    echo "</td>";
+                    echo "</tr>";
+                }
+            } else {
+                echo "<tr><td colspan='5'>No users found.</td></tr>";
             }
+            ?>
+            </tbody>
+        </table>
 
-            echo "<tr>";
-            echo "<td>" . htmlspecialchars($row["name"]) . "</td>";
-            echo "<td>" . htmlspecialchars($row["email"]) . "</td>";
-            echo "<td>" . ($row["usertype_id"] == 1 ? "Admin" : "User") . "</td>";
-            echo "<td>";
-            
-            // Edit and Delete buttons
-            echo "<a href='edituser.php?id=" . $row['id'] . "' class='btn btn-primary btn-sm mx-2'>Edit</a>";
-            echo "<form method='post' action='deleteuser.php' style='display:inline-block'>"; 
-            echo "<input type='hidden' name='user_id' value='" . $row['id'] . "'>";
-            echo "<button type='submit' class='btn btn-danger btn-sm mx-2'>Delete</button>";
-            echo "</form>";
+        <!-- Add User Button -->
+        <a href="adduser.php" class="btn btn-success btn-sm mt-3">Add User</a>
 
-            echo "</td>";
-            echo "</tr>";
-        }
-    } else {
-        echo "<tr><td colspan='5'>No users found.</td></tr>";
-    }
-    ?>
-    </tbody>
-</table>
-
-<!-- Add User Button -->
-<a href="adduser.php" class="btn btn-success btn-sm mt-3">Add User</a>
-
-<?php
-$conn->close();
-//session_destroy();
-?>
+    </div>
+    <?php $conn->close(); ?>
+</body>
+</html>

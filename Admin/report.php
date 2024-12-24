@@ -5,7 +5,11 @@ include 'AdminNavbar.php';
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-
+if (empty($_SESSION['id']) || $_SESSION['usertypeid'] != 1) {
+    // Redirect to a login page with an error message
+    header("Location: ./report.php?error=access_denied");
+    exit();
+}
 
 ?>
 

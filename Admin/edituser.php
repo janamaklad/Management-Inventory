@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Call edit method
     $result = $userObj->edit($user_id, $name, $email, $new_password, $role);
-
+If($_SESSION['usertypeid']==1){
     if ($result === true) {
         // Redirect back to user management page
         header("Location: ../Admin/Admin.php");
@@ -40,6 +40,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Display error message
         $general_err = $result;
     }
+}
+else{
+    if ($result === true) {
+        // Redirect back to user management page
+        header("Location: ../Homepage.php");
+        exit();
+    } elseif (is_string($result)) {
+        // Display error message
+        $general_err = $result;
+    } 
+}
 }
 
 $conn->close();
