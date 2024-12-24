@@ -7,6 +7,7 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
+$dbname = "project";        // Ensure the database 'project' exists in your MySQL
 
 
 // Create connection

@@ -134,7 +134,34 @@ $result = $conn->query($sql);
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-  <!-- navbar.php -->
+<?php
+// Check if the user is logged in and has a valid user type
+if (empty($_SESSION['id']) || ($_SESSION['usertypeid'] != 1 && $_SESSION['usertypeid'] != 2)) {
+    header("Location: ./Suppliers.php?error=access_denied");
+    exit();
+}
+
+// Fetch navbar buttons based on usertype_id
+$usertype_id = $_SESSION['usertypeid'];
+$sql = "SELECT * FROM navbar_buttons WHERE usertype_id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $usertype_id);
+$stmt->execute();
+$navbarButtons = $stmt->get_result();
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suppliers Management</title>
+    <link rel="stylesheet" href="admin.css"> 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+
 <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">Inventory System</a>
@@ -143,23 +170,36 @@ $result = $conn->query($sql);
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-               
+                <?php
+                if($_SESSION['usertypeid']==1){
+                // Display the navbar buttons based on the user's type
+                if ($navbarButtons->num_rows > 0) {
+                    while ($button = $navbarButtons->fetch_assoc()) {
+                        echo '<li class="nav-item">
+                                <a class="nav-link" href="' . htmlspecialchars($button['pagelink']) . '">' . htmlspecialchars($button['button_name']) . '</a>
+                              </li>';
+                    }
+                } else {
+                    echo '<li class="nav-item"><a class="nav-link" href="#">No buttons available</a></li>';
+                }
+            }
+            elseif($_SESSION['usertypeid']==2){
+                while ($button = $navbarButtons->fetch_assoc()) {
+                    echo '<li class="nav-item">
+                            <a class="nav-link" href="' . htmlspecialchars($button['pagelink']) . '">' . htmlspecialchars($button['button_name']) . '</a>
+                          </li>';
+                }
+            
+        }
+                ?>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Stock Management</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="Suppliers.php">Suppliers</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="report.php">Reports</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Logout</a>
+                   
                 </li>
             </ul>
         </div>
     </div>
 </nav>
+
     <div class="container mt-5">
         <h2>Suppliers Management</h2>
 
@@ -306,5 +346,5 @@ function prepareAddSupplier() {
 <?php
 // Close connection
 $conn->close();
-session_destroy();
+//session_destroy();
 ?>

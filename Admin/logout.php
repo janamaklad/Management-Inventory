@@ -13,4 +13,5 @@ session_destroy();
 // Redirect to login page
 header("Location: ../verify/login.php");
 exit();
+session_destroy();
 ?>
