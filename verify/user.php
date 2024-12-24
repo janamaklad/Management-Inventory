@@ -22,8 +22,8 @@ class User {
                         if (password_verify($password, $hashed_password)) {
                             // Start session and set session variables
                             if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
+                                session_start();
+                            }
                             $_SESSION["loggedin"] = true;
                             $_SESSION["id"] = $id;
                             $_SESSION["name"] = $name;
