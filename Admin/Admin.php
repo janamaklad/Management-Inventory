@@ -44,7 +44,11 @@ $result = $conn->query($sql);
         <a href="\Management-Inventory\Admin\report.php">Reports</a>
         <a href="orders.php">Orders</a>
         <a href="#">Settings</a>
+        <a href="products.php">Products</a>
+
     </div>
+    
+    
 
     <!-- Main Content -->
     <div class="main-content">
