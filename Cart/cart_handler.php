@@ -40,4 +40,57 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode(['success' => false]);
     }
 }
+
+
+// Include database connection
+include('../db.php');
+
+// Validate that the script is accessed via POST
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete') {
+    $productName = $_POST['product_name'];
+
+    // Check if the product exists in the cart
+    if (isset($_SESSION['cart'][$productName])) {
+        // Remove product from the cart
+        unset($_SESSION['cart'][$productName]);
+
+        // Calculate the new total
+        $total = 0;
+        foreach ($_SESSION['cart'] as $item) {
+            $total += $item['price'] * $item['quantity'];
+        }
+
+        // Redirect to the cart page with the updated total
+        header('Location: cart.php?total=' . urlencode($total));
+        exit();
+    } else {
+        // If the product doesn't exist in the cart
+        echo "Product not found in the cart.";
+    }
+}
+// Validate that the script is accessed via POST
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete') {
+    $productName = $_POST['product_name'];
+
+    // Check if the product exists in the cart
+    if (isset($_SESSION['cart'][$productName])) {
+        // Remove product from the cart
+        unset($_SESSION['cart'][$productName]);
+
+        // Calculate the new total
+        $total = 0;
+        foreach ($_SESSION['cart'] as $item) {
+            $total += $item['price'] * $item['quantity'];
+        }
+
+        // Redirect to the cart page with the updated total
+        header('Location: cart.php?total=' . urlencode($total));
+        exit();
+    } else {
+        // If the product doesn't exist in the cart
+        echo "Product not found in the cart.";
+    }
+}
 ?>
+
+

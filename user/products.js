@@ -19,7 +19,20 @@ function addToCart(productName) {
             alert('An error occurred.');
         });
 }
-
+function updateCartTable(cart) {
+    let cartBody = document.querySelector('#cartBody');
+    cartBody.innerHTML = ''; // Clear the existing table rows
+    cart.forEach(item => {
+        let row = `<tr>
+            <td>${item.name}</td>
+            <td>${item.price}</td>
+            <td>${item.quantity}</td>
+            <td>${(item.price * item.quantity).toFixed(2)}</td>
+            <td><button class="delete-btn" data-product="${item.id}">Delete</button></td>
+        </tr>`;
+        cartBody.innerHTML += row;
+    });
+}
 // Filtering and Search Functionality
 document.getElementById('searchInput').addEventListener('keyup', function () {
     let input = this.value.toLowerCase();
@@ -42,4 +55,3 @@ document.getElementById('filterSelect').addEventListener('change', function () {
         card.style.display = isVisible ? '' : 'none'; // Toggle visibility
     });
 });
-
