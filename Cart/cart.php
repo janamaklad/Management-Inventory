@@ -6,33 +6,6 @@ if (!isset($_SESSION['cart'])) {
     $_SESSION['cart'] = [];
 }
 
-// Handle AJAX requests to update quantities or delete items
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $response = ['status' => 'error'];
-    if (isset($_POST['action'])) {
-        if ($_POST['action'] === 'update') {
-            $productName = $_POST['product_name'];
-            $quantity = max(0, (int)$_POST['quantity']);
-            if (isset($_SESSION['cart'][$productName])) {
-                if ($quantity === 0) {
-                    unset($_SESSION['cart'][$productName]);
-                } else {
-                    $_SESSION['cart'][$productName]['quantity'] = $quantity;
-                }
-                $response = ['status' => 'success', 'total' => calculateCartTotal()];
-            }
-        } elseif ($_POST['action'] === 'delete') {
-            $productName = $_POST['product_name'];
-            if (isset($_SESSION['cart'][$productName])) {
-                unset($_SESSION['cart'][$productName]);
-                $response = ['status' => 'success', 'total' => calculateCartTotal()];
-            }
-        }
-    }
-    echo json_encode($response);
-    exit;
-}
-
 // Function to calculate total cart price
 function calculateCartTotal() {
     $total = 0;
@@ -40,6 +13,22 @@ function calculateCartTotal() {
         $total += $item['price'] * $item['quantity'];
     }
     return number_format($total, 2);
+}
+
+// Handle quantity updates via POST
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['action']) && isset($_POST['product_name'])) {
+        $productName = $_POST['product_name'];
+        if (isset($_SESSION['cart'][$productName])) {
+            if ($_POST['action'] === 'increment') {
+                $_SESSION['cart'][$productName]['quantity']++;
+            } elseif ($_POST['action'] === 'decrement' && $_SESSION['cart'][$productName]['quantity'] > 1) {
+                $_SESSION['cart'][$productName]['quantity']--;
+            }
+        }
+    }
+    header("Location: cart.php");
+    exit();
 }
 ?>
 
@@ -50,7 +39,6 @@ function calculateCartTotal() {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Cart</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 </head>
 <body>
     <header class="text-white text-center py-3">
@@ -71,33 +59,37 @@ function calculateCartTotal() {
                         <th>Action</th>
                     </tr>
                 </thead>
-                <tbody id="cartBody">
+                <tbody>
                     <?php
                     $total = 0;
                     foreach ($_SESSION['cart'] as $productName => $item):
                         $itemTotal = $item['price'] * $item['quantity'];
                         $total += $itemTotal;
                     ?>
-                        <tr data-product="<?= htmlspecialchars($productName) ?>">
+                        <tr>
                             <td><?= htmlspecialchars($item['name']) ?></td>
                             <td>$<?= number_format($item['price'], 2) ?></td>
                             <td>
-                                <input type="number" 
-                                       class="form-control quantity-input" 
-                                       value="<?= $item['quantity'] ?>" 
-                                       min="0" 
-                                       data-product="<?= htmlspecialchars($productName) ?>" 
-                                       style="width: 80px;">
+                                <form method="POST" action="cart.php" class="d-inline">
+                                    <input type="hidden" name="product_name" value="<?= htmlspecialchars($productName) ?>">
+                                    <button class="btn btn-sm btn-secondary" type="submit" name="action" value="decrement">-</button>
+                                    <span class="mx-2"><?= $item['quantity'] ?></span>
+                                    <button class="btn btn-sm btn-secondary" type="submit" name="action" value="increment">+</button>
+                                </form>
                             </td>
-                            <td class="item-total">$<?= number_format($itemTotal, 2) ?></td>
+                            <td>$<?= number_format($itemTotal, 2) ?></td>
                             <td>
-                                <button class="btn btn-danger btn-sm delete-btn" data-product="<?= htmlspecialchars($productName) ?>">Delete</button>
+                                <form method="POST" action="cart_handler.php" style="display:inline;">
+                                    <input type="hidden" name="product_name" value="<?= htmlspecialchars($productName) ?>">
+                                    <button class="btn btn-danger btn-sm" type="submit" name="action" value="delete">Delete</button>
+                                </form>
                             </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
             </table>
-            <h3>Total: $<span id="cartTotal"><?= number_format($total, 2) ?></span></h3>
+            <h3>Total: $<?= number_format($total, 2) ?></h3>
+            <a href="checkout.php" class="btn btn-primary">Proceed to Payment</a>
         <?php else: ?>
             <p>Your cart is empty.</p>
         <?php endif; ?>
@@ -106,7 +98,5 @@ function calculateCartTotal() {
     <footer class="bg-light text-center py-3">
         <p>&copy; 2024 Inventory Management System. All rights reserved.</p>
     </footer>
-
-   <script src="cart.js"></script>
 </body>
 </html>
