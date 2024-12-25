@@ -42,33 +42,38 @@ if (session_status() === PHP_SESSION_NONE) {
 
     <div class="row" id="productContainer">
         <?php
-        // Fetch products from the database
-        $sql = "SELECT * FROM products";
-        $result = $conn->query($sql);
+        // Check if the database connection is valid
+        if ($conn instanceof mysqli && !$conn->connect_error) {
+            // Fetch products from the database
+            $sql = "SELECT * FROM products";
+            $result = $conn->query($sql);
 
-        // Check if there are products in the database
-        if ($result && $result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                $image_url = !empty($row["image_url"]) ? $row["image_url"] : 'path/to/placeholder.jpg';
-                echo '<div class="col-md-3">';
-                echo '  <div class="card mb-4" data-category="' . strtolower($row["Category"]) . '">';
-                echo '      <img src="' . $image_url . '" class="card-img-top" alt="Product Image">';
-                echo '      <div class="card-body">';
-                echo '          <h5 class="card-title">' . htmlspecialchars($row["ProductName"]) . '</h5>';
-                echo '          <p class="card-text">Price: $' . htmlspecialchars($row["Price"]) . '</p>';
-                echo '          <p class="card-text">Category: ' . htmlspecialchars($row["Category"]) . '</p>';
-                echo '          <p class="card-text">Available Quantity: ' . htmlspecialchars($row["Quantity"]) . '</p>';
-                if (!empty($_SESSION['id'])) {
-                    echo '          <button class="btn btn-success" onclick="addToCart(\'' . addslashes($row["ProductName"]) . '\')">Add to Cart</button>';
-                } else {
-                    echo '          <button class="btn btn-success" onclick="alert(\'You must log in or sign up to add products to cart\')">Add to Cart</button>';
+            // Check if there are products in the database
+            if ($result && $result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    $image_url = !empty($row["image_url"]) ? $row["image_url"] : 'path/to/placeholder.jpg';
+                    echo '<div class="col-md-3">';
+                    echo '  <div class="card mb-4" data-category="' . strtolower($row["Category"]) . '">';
+                    echo '      <img src="' . $image_url . '" class="card-img-top" alt="Product Image">';
+                    echo '      <div class="card-body">';
+                    echo '          <h5 class="card-title">' . htmlspecialchars($row["ProductName"]) . '</h5>';
+                    echo '          <p class="card-text">Price: $' . htmlspecialchars($row["Price"]) . '</p>';
+                    echo '          <p class="card-text">Category: ' . htmlspecialchars($row["Category"]) . '</p>';
+                    echo '          <p class="card-text">Available Quantity: ' . htmlspecialchars($row["Quantity"]) . '</p>';
+                    if (!empty($_SESSION['id'])) {
+                        echo '          <button class="btn btn-success" onclick="addToCart(\'' . addslashes($row["ProductName"]) . '\')">Add to Cart</button>';
+                    } else {
+                        echo '          <button class="btn btn-success" onclick="alert(\'You must log in or sign up to add products to cart\')">Add to Cart</button>';
+                    }
+                    echo '      </div>';
+                    echo '  </div>';
+                    echo '</div>';
                 }
-                echo '      </div>';
-                echo '  </div>';
-                echo '</div>';
+            } else {
+                echo '<p>No products available.</p>';
             }
         } else {
-            echo '<p>No products available.</p>';
+            echo '<p>Failed to connect to the database. Please try again later.</p>';
         }
         ?>
     </div>
