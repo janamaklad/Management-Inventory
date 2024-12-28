@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Check if the cart exists in the session
+// Ensure cart is initialized
 if (!isset($_SESSION['cart'])) {
     $_SESSION['cart'] = [];
 }
@@ -17,8 +17,10 @@ function calculateCartTotal() {
 
 // Handle quantity updates via POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['action']) && isset($_POST['product_name'])) {
+    if (isset($_POST['action'], $_POST['product_name'])) {
         $productName = $_POST['product_name'];
+
+        // Check if the product exists in the cart
         if (isset($_SESSION['cart'][$productName])) {
             if ($_POST['action'] === 'increment') {
                 $_SESSION['cart'][$productName]['quantity']++;
@@ -27,6 +29,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     }
+
+    // Redirect back to the cart page to prevent resubmission
     header("Location: cart.php");
     exit();
 }

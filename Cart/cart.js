@@ -22,7 +22,7 @@ $(document).ready(function () {
             const data = JSON.parse(response);
             if (data.status === 'success') {
                 if (quantity == 0) {
-                    $(tr[data-product="${productName}"]).remove(); // Remove row if quantity is 0
+                    $(`tr[data - product= "${productName}"]`).remove(); // Remove row if quantity is 0
                 }
                 refreshCart(data.total);
             }
@@ -37,7 +37,7 @@ $(document).ready(function () {
         }, function (response) {
             const data = JSON.parse(response);
             if (data.status === 'success') {
-                $(tr[data-product="${productName}"]).remove(); // Remove row from table
+                $(`tr[data - product= "${productName}"]`).remove(); // Remove row from table
                 refreshCart(data.total);
             }
         });

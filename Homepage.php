@@ -56,7 +56,7 @@ if (isset($_GET['error'])) {
                         $pagelink = htmlspecialchars($button['pagelink']);
 
                         // Show all buttons except login and signup for logged-in users
-                        if ($button_name !== "Login" && $button_name !== "Sign Up"&&$button_name !== "Contact"&&$button_name !== "About US") {
+                        if ($button_name !== "Login" && $button_name !== "Sign Up"&&$button_name !== "Contact"&&$button_name !== "About US"&&$button_name !== "Home") {
                             echo "<li><a href='$pagelink'>$button_name</a></li>";
                         }
                     }
