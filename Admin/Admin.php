@@ -1,6 +1,9 @@
 <?php
-
 include '../db.php';
+require_once '../classes/Product.php';
+require_once '../classes/DashboardUpdater.php'; // Include the DashboardUpdater observer
+require_once '../classes/ReorderNotifier.php'; // Include the ReorderNotifier observer
+
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
@@ -20,6 +23,54 @@ $sql = "SELECT id, name, email, password, usertype_id FROM users WHERE usertype_
 
 $result = $conn->query($sql);
 
+
+
+// Check if the request is to reduce stock
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'], $_POST['reduce_quantity'])) {
+    $productId = $_POST['product_id'];
+    $reduceQuantity = $_POST['reduce_quantity'];
+
+    try {
+        // Create a product instance
+        $product = new Product($conn, $productId);
+
+        // Create and attach observers
+        $reorderNotifier = new ReorderNotifier();
+        $dashboardUpdater = new DashboardUpdater($conn);
+        $product->attachObserver($reorderNotifier);
+        $product->attachObserver($dashboardUpdater);
+
+        // Reduce stock and trigger observers
+        $product->reduceStock($reduceQuantity);
+
+        echo "Stock updated successfully.";
+    } catch (Exception $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+// Validate admin session
+if (empty($_SESSION['id']) || $_SESSION['usertypeid'] != 1) {
+    header("Location: ./Admin.php?error=access_denied");
+    exit();
+}
+
+// Fetch product and supplier data for the dashboard
+$productSql = "SELECT id, ProductName, Quantity FROM products";
+$productResult = $conn->query($productSql);
+$totalProducts = $productResult->num_rows;
+
+$lowStockCount = 0;
+$lowStockThreshold = 10; // Define the threshold for low stock
+while ($row = $productResult->fetch_assoc()) {
+    if ($row['Quantity'] < $lowStockThreshold) {
+        $lowStockCount++;
+    }
+}
+
+$supplierSql = "SELECT COUNT(*) as totalSuppliers FROM suppliers";
+$supplierResult = $conn->query($supplierSql);
+$totalSuppliers = $supplierResult->fetch_assoc()['totalSuppliers'];
 ?>
 
 <!DOCTYPE html>
@@ -32,95 +83,42 @@ $result = $conn->query($sql);
     <link rel="stylesheet" href="admin.css"> 
 </head>
 <body>
-    <!-- Include Navbar -->
     <?php include 'AdminNavbar.php'; ?>
 
-    <!-- Sidebar -->
     <div class="sidebar">
         <h4 class="text-light">Menu</h4>
         <a href="#">Stock Management</a>
         <a href="report.php">Reports</a>
         <a href="Suppliers.php">Suppliers</a>
-        <a href="\Management-Inventory\Admin\report.php">Reports</a>
         <a href="orders.php">Orders</a>
         <a href="#">Settings</a>
         <a href="products.php">Products</a>
         <a href="../managenavbar.php">Manage Navbar Buttons</a>
-        
-    </div>
-    
-    
+        <a href="../verify/factory/testfactory.php">Factory Options</a> <!-- New Factory Options Button -->
 
-    <!-- Main Content -->
+    </div>
+
     <div class="main-content">
         <h2>Dashboard</h2>
         <div class="row">
-            <!-- Cards showing some stats -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Total Products</h5>
-                        <p class="card-text">150</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Low Stock Items</h5>
-                        <p class="card-text">12</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Total Suppliers</h5>
-                        <p class="card-text">8</p>
-                    </div>
-                </div>
-            </div>
+            <div class="col-md-4"><div class="card"><div class="card-body"><h5>Total Products</h5><p><?= $totalProducts ?></p></div></div></div>
+            <div class="col-md-4"><div class="card"><div class="card-body"><h5>Low Stock Items</h5><p><?= $lowStockCount ?></p></div></div></div>
+            <div class="col-md-4"><div class="card"><div class="card-body"><h5>Total Suppliers</h5><p><?= $totalSuppliers ?></p></div></div></div>
         </div>
- <!-- Stock Management Table -->
-        <h3>Stock Management</h3>
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Product Name</th>
-                    <th>Category</th>
-                    <th>Stock Level</th>
-                    <th>Supplier</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
+
+        <h3>Stock </h3>
+        <table class="table">
+            <thead><tr><th>Product Name</th><th>Stock Level</th></thead>
             <tbody>
-                <tr>
-                    <td>Product A</td>
-                    <td>Category 1</td>
-                    <td>25</td>
-                    <td>Supplier X</td>
-                    <td>
-                        <button class="btn btn-primary btn-sm">Edit</button>
-                        <button class="btn btn-danger btn-sm">Delete</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Product B</td>
-                    <td>Category 2</td>
-                    <td>5</td>
-                    <td>Supplier Y</td>
-                    <td>
-                        <button class="btn btn-primary btn-sm">Edit</button>
-                        <button class="btn btn-danger btn-sm">Delete</button>
-                    </td>
-                </tr>
+                <?php
+                $productResult = $conn->query($productSql);
+                while ($row = $productResult->fetch_assoc()) {
+                    echo "<tr><td>{$row['ProductName']}</td><td>{$row['Quantity']}</td>";
+                }
+                ?>
             </tbody>
         </table>
-
-
-
-
-<!-- User Management Section -->
+        <!-- User Management Section -->
 <h3 class="mt-5">User Management</h3>
 <table class="table table-hover">
     <thead>
@@ -169,4 +167,10 @@ $result = $conn->query($sql);
 <?php
 $conn->close();
 //session_destroy();
-?>
+?> 
+    </div>
+</body>
+</html>
+
+<?php $conn->close(); ?>
+

@@ -1,17 +1,15 @@
 <?php
 session_start();
-include '../db.php'; // Adjust the path to match your project structure
-
-// Validate session data
-if (!isset($_SESSION['id'])) {
-    echo "Session data: ";
-    print_r($_SESSION); // Debug output
-    die("Error: User is not logged in. Please log in to continue.");
-}
-
-$userId = $_SESSION['id']; // Use the correct key from session
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Encryption key (store securely)
+    $encryption_key = "your_secure_encryption_key"; // Replace with a strong key
+    $cipher_method = "AES-256-CBC";
+    $iv_length = openssl_cipher_iv_length($cipher_method);
+
+    // Generate IV and store it in a variable
+    $iv = openssl_random_pseudo_bytes($iv_length);
+
     // Retrieve and sanitize input
     $cardName = htmlspecialchars($_POST['card_name']);
     $cardNumber = htmlspecialchars($_POST['card_number']);
@@ -22,53 +20,54 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (strlen($cardNumber) != 16 || !ctype_digit($cardNumber)) {
         die("Error: Invalid card number. Please enter a 16-digit card number.");
     }
+
     if (strlen($cvv) != 3 || !ctype_digit($cvv)) {
         die("Error: Invalid CVV. Please enter a 3-digit CVV.");
     }
+
+    // Encrypt sensitive data
+    $encryptedCardNumber = openssl_encrypt($cardNumber, $cipher_method, $encryption_key, 0, $iv);
+    $encryptedCVV = openssl_encrypt($cvv, $cipher_method, $encryption_key, 0, $iv);
 
     // Simulate payment processing
     $paymentSuccess = true; // Replace with real payment gateway logic.
 
     if ($paymentSuccess) {
-        // Retrieve cart items for the logged-in user
-        $cartQuery = $conn->prepare("SELECT product_id, supplier_id, quantity FROM cart WHERE user_id = ?");
-        $cartQuery->bind_param("i", $userId);
-        $cartQuery->execute();
-        $cartItems = $cartQuery->get_result();
-
-        if ($cartItems->num_rows > 0) {
-            $orderDate = date('Y-m-d H:i:s');
-            $status = 'Pending';
-
-            // Process each item in the cart
-            while ($item = $cartItems->fetch_assoc()) {
-                $productId = $item['product_id'];
-                $supplierId = $item['supplier_id'];
-                $quantity = $item['quantity'];
-
-                // Insert into orders table
-                $stmt = $conn->prepare("INSERT INTO orders (product_id, supplier_id, quantity, order_date, status) VALUES (?, ?, ?, ?, ?)");
-                $stmt->bind_param("iiiss", $productId, $supplierId, $quantity, $orderDate, $status);
-                $stmt->execute();
-                $stmt->close();
-            }
-
-            // Clear the cart for the user
-            $deleteCartQuery = $conn->prepare("DELETE FROM cart WHERE user_id = ?");
-            $deleteCartQuery->bind_param("i", $userId);
-            $deleteCartQuery->execute();
-            $deleteCartQuery->close();
-
-            echo "<h2>Payment Successful!</h2>";
-            echo "<p>Your order has been placed successfully. Thank you, $cardName!</p>";
-        } else {
-            die("Error: Your cart is empty. Please add items to proceed.");
+        // Clear the cart session after payment
+        if (isset($_SESSION['cart'])) {
+            unset($_SESSION['cart']); // Clear the cart
         }
 
-        $cartQuery->close();
+        // Store payment data securely in the database
+        include '../db.php';
+        $stmt = $conn->prepare("INSERT INTO payments (card_name, card_number, expiry_date, cvv, iv) VALUES (?, ?, ?, ?, ?)");
+        $encodedIv = base64_encode($iv);
+        $stmt->bind_param("sssss", $cardName, $encryptedCardNumber, $expiryDate, $encryptedCVV, $encodedIv);
+
+        // Execute query and check for success
+        if ($stmt->execute()) {
+            // Success message
+            echo '<div class="payment-success-container">';
+            echo "<h2>Payment Successful!</h2>";
+            echo "<p>Thank you, $cardName. Your payment has been processed successfully.</p>";
+            echo '<a href="cart.php" class="btn btn-primary">Return to Cart</a>';
+            echo '</div>';
+        } else {
+            echo "<h2>Database Error!</h2>";
+            echo "<p>Could not store payment information. Please try again.</p>";
+        }
+
+        // Close database connection
+        $stmt->close();
+        $conn->close();
     } else {
         echo "<h2>Payment Failed!</h2>";
         echo "<p>Sorry, we were unable to process your payment. Please try again.</p>";
+        echo '<a href="checkout.php" class="btn btn-danger">Retry Payment</a>';
     }
+} else {
+    // Redirect to checkout if accessed directly
+    header("Location: checkout.php");
+    exit();
 }
 ?>
