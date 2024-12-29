@@ -3,11 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
-<<<<<<< HEAD
 -- Generation Time: Dec 25, 2024 at 12:29 PM
-=======
--- Generation Time: Dec 23, 2024 at 12:17 PM
->>>>>>> 8038952951e7a50633008eb227b573e580e195cf
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -71,7 +67,6 @@ CREATE TABLE `navbar_buttons` (
 INSERT INTO `navbar_buttons` (`ID`, `button_name`, `pagelink`, `usertype_id`) VALUES
 (1, 'Home', 'http://localhost/Management-Inventory/Homepage.php', 0),
 (2, 'About us', 'http://localhost/Management-Inventory/Aboutus.php', 0),
-<<<<<<< HEAD
 (3, 'Contact us', 'http://localhost/Management-Inventory/Contact.php', 0),
 (7, 'Log out', ' \'http://localhost/Management-Inventory/Admin/logout.php\'', 0),
 (8, 'Suppliers', '	\'http://localhost/Management-Inventory/Admin/Suppliers.php', 1),
@@ -82,9 +77,6 @@ INSERT INTO `navbar_buttons` (`ID`, `button_name`, `pagelink`, `usertype_id`) VA
 (13, 'Sign Up', 'http://localhost/Management-Inventory/verify/register.php', 0),
 (14, 'Reports', 'http://localhost/Management-Inventory/Admin/report.php', 2),
 (15, 'Stock Management ', '#', 2);
-=======
-(3, 'Contact us', 'http://localhost/Management-Inventory/Contact.php', 0);
->>>>>>> 8038952951e7a50633008eb227b573e580e195cf
 
 -- --------------------------------------------------------
 
