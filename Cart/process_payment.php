@@ -46,9 +46,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Execute query and check for success
         if ($stmt->execute()) {
+            // Success message
+            echo '<div class="payment-success-container">';
             echo "<h2>Payment Successful!</h2>";
             echo "<p>Thank you, $cardName. Your payment has been processed successfully.</p>";
             echo '<a href="cart.php" class="btn btn-primary">Return to Cart</a>';
+            echo '</div>';
         } else {
             echo "<h2>Database Error!</h2>";
             echo "<p>Could not store payment information. Please try again.</p>";

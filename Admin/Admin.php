@@ -94,6 +94,8 @@ $totalSuppliers = $supplierResult->fetch_assoc()['totalSuppliers'];
         <a href="#">Settings</a>
         <a href="products.php">Products</a>
         <a href="../managenavbar.php">Manage Navbar Buttons</a>
+        <a href="../verify/factory/testfactory.php">Factory Options</a> <!-- New Factory Options Button -->
+
     </div>
 
     <div class="main-content">
