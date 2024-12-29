@@ -3,7 +3,11 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
+<<<<<<< HEAD
 -- Generation Time: Dec 25, 2024 at 12:29 PM
+=======
+-- Generation Time: Dec 23, 2024 at 12:17 PM
+>>>>>>> 8038952951e7a50633008eb227b573e580e195cf
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -67,6 +71,7 @@ CREATE TABLE `navbar_buttons` (
 INSERT INTO `navbar_buttons` (`ID`, `button_name`, `pagelink`, `usertype_id`) VALUES
 (1, 'Home', 'http://localhost/Management-Inventory/Homepage.php', 0),
 (2, 'About us', 'http://localhost/Management-Inventory/Aboutus.php', 0),
+<<<<<<< HEAD
 (3, 'Contact us', 'http://localhost/Management-Inventory/Contact.php', 0),
 (7, 'Log out', ' \'http://localhost/Management-Inventory/Admin/logout.php\'', 0),
 (8, 'Suppliers', '	\'http://localhost/Management-Inventory/Admin/Suppliers.php', 1),
@@ -77,6 +82,9 @@ INSERT INTO `navbar_buttons` (`ID`, `button_name`, `pagelink`, `usertype_id`) VA
 (13, 'Sign Up', 'http://localhost/Management-Inventory/verify/register.php', 0),
 (14, 'Reports', 'http://localhost/Management-Inventory/Admin/report.php', 2),
 (15, 'Stock Management ', '#', 2);
+=======
+(3, 'Contact us', 'http://localhost/Management-Inventory/Contact.php', 0);
+>>>>>>> 8038952951e7a50633008eb227b573e580e195cf
 
 -- --------------------------------------------------------
 
@@ -119,6 +127,7 @@ CREATE TABLE `pages` (
 -- --------------------------------------------------------
 
 --
+<<<<<<< HEAD
 -- Table structure for table `payments`
 --
 
@@ -153,6 +162,8 @@ INSERT INTO `payments` (`id`, `card_name`, `card_number`, `expiry_date`, `cvv`, 
 -- --------------------------------------------------------
 
 --
+=======
+>>>>>>> 8038952951e7a50633008eb227b573e580e195cf
 -- Table structure for table `products`
 --
 
@@ -179,8 +190,12 @@ INSERT INTO `products` (`ID`, `ProductName`, `Price`, `SellerName`, `Picture`, `
 (7, 'chocolate', 20, 'Dairy Milk', '', 40, '/Management-Inventory/images/vegan-milk-chocolate-recipe.jpg', 5, 'Sweets'),
 (11, 'Redbull', 70, 'redbull', '', 35, '\\Management-Inventory\\images\\redbull.png', 0, 'Drinks'),
 (12, 'croissant', 20, 'TBS', '', 9, '/Management-Inventory/images/images.jpg', 0, 'Bakery'),
+<<<<<<< HEAD
 (13, 'TOMATO', 10, 'tomato', '', 50, '\\Management-Inventory\\images\\TOMATO.jpg', 0, 'Groceries'),
 (14, 'hot chocolate', 50, 'TBS', '', 20, 'https://www.foodandwine.com/thmb/V1OEgtLQGUv_w2Fvm40WMLsJ4rk=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Indulgent-Hot-Chocolate-FT-RECIPE0223-fd36942ef266417ab40440374fc76a15.jpg', 0, 'Drinks');
+=======
+(13, 'TOMATO', 10, 'tomato', '', 50, '\\Management-Inventory\\images\\TOMATO.jpg', 0, 'Groceries');
+>>>>>>> 8038952951e7a50633008eb227b573e580e195cf
 
 -- --------------------------------------------------------
 
@@ -238,8 +253,12 @@ INSERT INTO `users` (`ID`, `Name`, `Email`, `Password`, `usertype_id`) VALUES
 (18, 'sandy', 'sandy@gmail.com', '$2y$10$Id5Oqtw4UpGPegwlaPoxl.mjtMlrcqSx/dhP5QwtEX65bELY10fHW', 1),
 (19, 'twinkies', 'twinkies2@gmail.com', '$2y$10$Wha.sz7EQaxGrTwvyXmYTekfFUQ29SF.zFKo6lYucyO2KmLqdwn5O', 2),
 (20, 'bah', 'bahigmahmoud11@gamil.com', '$2y$10$sA1oitAkvBHhdgDc1HnDmeIMxIHGmchsp.N9Lhdmi.gFNeRH6c/ui', 2),
+<<<<<<< HEAD
 (21, 'todo', 'todo@gmail.com', '$2y$10$FruzkauxZE2KGbx0vu.mN.2MiIbFybTPGygWIEcq/2xgsKZQSd14K', 2),
 (22, 'Hania Maher', 'hania235@gmail.com', '$2y$10$avY7Hh2mW63Sh5FpPQG.o.nVT3OLg9gscEz8iRsxkC6V.Pzs.eoIK', 0);
+=======
+(21, 'todo', 'todo@gmail.com', '$2y$10$FruzkauxZE2KGbx0vu.mN.2MiIbFybTPGygWIEcq/2xgsKZQSd14K', 2);
+>>>>>>> 8038952951e7a50633008eb227b573e580e195cf
 
 -- --------------------------------------------------------
 
@@ -257,7 +276,11 @@ CREATE TABLE `usertypes` (
 --
 
 INSERT INTO `usertypes` (`ID`, `Name`) VALUES
+<<<<<<< HEAD
 (0, 'admin'),
+=======
+(0, 'Customer'),
+>>>>>>> 8038952951e7a50633008eb227b573e580e195cf
 (1, 'Admin'),
 (2, 'Supplier');
 
@@ -294,12 +317,15 @@ ALTER TABLE `pages`
   ADD PRIMARY KEY (`ID`);
 
 --
+<<<<<<< HEAD
 -- Indexes for table `payments`
 --
 ALTER TABLE `payments`
   ADD PRIMARY KEY (`id`);
 
 --
+=======
+>>>>>>> 8038952951e7a50633008eb227b573e580e195cf
 -- Indexes for table `products`
 --
 ALTER TABLE `products`
@@ -338,7 +364,11 @@ ALTER TABLE `chat_messages`
 -- AUTO_INCREMENT for table `navbar_buttons`
 --
 ALTER TABLE `navbar_buttons`
+<<<<<<< HEAD
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+=======
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+>>>>>>> 8038952951e7a50633008eb227b573e580e195cf
 
 --
 -- AUTO_INCREMENT for table `orders`
@@ -353,6 +383,7 @@ ALTER TABLE `pages`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+<<<<<<< HEAD
 -- AUTO_INCREMENT for table `payments`
 --
 ALTER TABLE `payments`
@@ -363,6 +394,12 @@ ALTER TABLE `payments`
 --
 ALTER TABLE `products`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+=======
+-- AUTO_INCREMENT for table `products`
+--
+ALTER TABLE `products`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+>>>>>>> 8038952951e7a50633008eb227b573e580e195cf
 
 --
 -- AUTO_INCREMENT for table `suppliers`
@@ -374,7 +411,11 @@ ALTER TABLE `suppliers`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
+<<<<<<< HEAD
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+=======
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+>>>>>>> 8038952951e7a50633008eb227b573e580e195cf
 
 --
 -- Constraints for dumped tables
