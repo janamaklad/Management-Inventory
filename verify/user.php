@@ -10,7 +10,7 @@ class User {
     // Login function
     public function login($email, $password) {
         $sql = "SELECT id, name, password, usertype_id FROM users WHERE email = ?";
-        if ($stmt = $this->conn->prepare($sql)) {
+        if ($stmt = $this->conn->prepare($sql)) { //sql injection  'OR'1'='1
             $stmt->bind_param("s", $email);
 
             if ($stmt->execute()) {

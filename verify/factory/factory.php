@@ -1,5 +1,5 @@
 <?php
-class Factory {
+class Factory { //class for creating object
     public static function create($type, $params = []) {
         switch ($type) {
             case 'User':
