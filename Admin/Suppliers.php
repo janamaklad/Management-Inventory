@@ -62,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit(); 
     } else {
         // Create new user
-        $stmt_user = $conn->prepare("INSERT INTO users (Name, Email, Password, `usertype_id`) VALUES (?, ?, ?, ?)");
+        $stmt_user = $conn->prepare("INSERT INTO users (Name, Email, Password, usertype_id) VALUES (?, ?, ?, ?)");
         $usertype_id = 2; // Assuming '2' represents supplier
         $stmt_user->bind_param("sssi", $supplier_name, $email, $hashed_password, $usertype_id);
         $stmt_user->execute();
@@ -132,7 +132,27 @@ $result = $conn->query($sql);
     <link rel="stylesheet" href="admin.css"> 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        /* Ensure the body is scrollable when content overflows */
+        body {
+            overflow-y: auto;  /* Enables vertical scrolling */
+            height: 100vh;      /* Ensures the body takes up the full height of the screen */
+            margin: 0;          /* Removes default margin */
+        }
+
+        /* Optional: Limit the height of specific containers like the table container */
+        .container {
+            max-height: 80vh;      /* Limits the height of the container to 80% of viewport height */
+            overflow-y: auto;      /* Enables vertical scrolling */
+        }
+        /* Optional: Style for modal, ensure it doesn't block scrolling */
+        .modal-dialog {
+            max-height: 90vh;    /* Limit modal height */
+            overflow-y: auto;    /* Enables scrolling for the modal content */
+        }
+    </style>
 </head>
+
 <body>
 <?php
 // Check if the user is logged in and has a valid user type
